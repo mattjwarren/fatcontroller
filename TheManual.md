@@ -33,7 +33,6 @@ Tasks are specific commands assigned to a daemon. They can be simple commands or
 | `clear` | Clear the current output panel. | `clear` |
 | `readfile <filename>` | Execute commands from a text file. | `readfile setup.txt` |
 | `message <text>` | Display a message in the output. | `message "Hello World"` |
-| `trace <module>` | Toggle debug tracing for a module. | `trace ALL`, `trace FatController` |
 
 ### Entity Management
 | Command | Description | Example |
@@ -41,8 +40,6 @@ Tasks are specific commands assigned to a daemon. They can be simple commands or
 | `define entity <type> <name> <params>` | Define a new entity. | `define entity LOCAL myserver` |
 | `show entities` | List all defined entities. | `show entities` |
 | `delete entity <name>` | Delete an entity. | `delete entity myserver` |
-| `substitute <name> <value>` | Define a text substitution variable. | `substitute MYDIR /tmp/data` |
-| `show substitutions` | List all substitutions. | `show substitutions` |
 | `<entity> <command>` | Execute a command on an entity. | `myserver ls -la` |
 
 **Entity Specific Examples:**
@@ -50,28 +47,72 @@ Tasks are specific commands assigned to a daemon. They can be simple commands or
 - **SSH**: `define entity SSH <name> <hostname> <user> <password> <keyfile>`
 - **ENTITYGROUP**: `define entity ENTITYGROUP <name> <member1> <member2> ...`
 
+### Aliases & Substitutions
+Aliases are shortcuts for long commands, and substitutions are text variables.
+
+| Command | Description | Example |
+| :--- | :--- | :--- |
+| `alias <name> <command>` | Create an alias. | `alias ll ls -la` |
+| `show aliases` | List all aliases. | `show aliases` |
+| `delete alias <name>` | Delete an alias. | `delete alias ll` |
+| `substitute <name> <value>` | Define a text substitution (`^name`). | `substitute MYDIR /tmp/data` |
+| `show substitutions` | List all substitutions. | `show substitutions` |
+| `delete substitution <name>` | Delete a substitution. | `delete substitution MYDIR` |
+
 ### Daemon & Task Management
+Daemons run tasks on a schedule. Tasks can be generic commands or specific collectors.
+
 | Command | Description | Example |
 | :--- | :--- | :--- |
 | `define daemon <name>` | Create a new daemon. | `define daemon Monitor` |
 | `define schedule <daemon> <start> <end> <period>` | Set schedule for a daemon. | `define schedule Monitor 08:00 18:00 300` |
-| `define task <daemon> <name> <command>` | Add a task to a daemon. | `define task Monitor CheckDisk df -h` |
 | `activate daemon <name>` | Start a daemon. | `activate daemon Monitor` |
 | `deactivate daemon <name>` | Stop a daemon. | `deactivate daemon Monitor` |
 | `show active daemons` | detailed list of running daemons. | `show active daemons` |
 | `show daemons` | List all configured daemons. | `show daemons` |
+| `delete daemon <name>` | Delete a daemon. | `delete daemon Monitor` |
+
+**Daemon Tasks:**
+| Command | Description | Example |
+| :--- | :--- | :--- |
+| `define task <daemon> <name> <cmd>` | Add a task to a daemon. | `define task Monitor CheckDisk df -h` |
+| `update task <daemon> <name> <cmd>` | Update an existing task. | `update task Monitor CheckDisk df -k` |
+| `delete task <daemon> <name>` | Remove a task. | `delete task Monitor CheckDisk` |
+
+**Task Subscriptions:**
+You can subscribe specific entities to a daemon task, allowing the task to run against them.
+| Command | Description | Example |
+| :--- | :--- | :--- |
+| `subscribe entity <daemon> <task> <entity>` | Add entity to task scope. | `subscribe entity Monitor CheckDisk myserver` |
+| `unsubscribe entity <daemon> <task> <entity>` | Remove entity from task scope. | `unsubscribe entity Monitor CheckDisk myserver` |
 
 ## Advanced Features
 
 ### Scripts
-Scripts allow you to bundle commands together.
-- `addline <script> <command>`: Add a line to a script.
-- `run <script> <args>`: Execute a script.
-- `show scripts`: List defined scripts.
+Scripts allow you to bundle commands together and execute them sequentially.
+
+| Command | Description | Example |
+| :--- | :--- | :--- |
+| `run <script> <args>` | Execute a script. | `run myscript` |
+| `show scripts` | List all scripts. | `show scripts` |
+| `show script <name>` | Display content of a script. | `show script myscript` |
+| `delete script <name>` | Delete a script. | `delete script myscript` |
+
+**Editing Scripts:**
+- `addline <script> <command>`: Append a line to the end of a script.
+- `insline <script> <lineNum> <command>`: Insert a line at a specific position.
+- `delline <script> <lineNum>`: Delete a specific line.
+
+### Global Options & Debugging
+| Command | Description | Example |
+| :--- | :--- | :--- |
+| `set <Class> <Option> <Value>` | Set a global option for an entity class. | `set TELNET ShowRawTelnet yes` |
+| `show options` | Show all set options. | `show options` |
+| `trace <module>` | Toggle debug tracing for a module. | `trace FatController` |
 
 ### Checking for Alerts
 - `alerts`: Show current alert queue.
-- `handle <id>`: Acknowledge/clear an alert.
+- `handle <id>` | `handle <start> <end>`: Acknowledge/clear alert(s) by ID or range.
 
 ## Monitoring & Alerts
 FatController allows you to extract specific data from your tasks (Collectors) and trigger alerts based on that data.
