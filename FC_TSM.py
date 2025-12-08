@@ -1,4 +1,5 @@
 import FC_entity,os,subprocess,shutil
+import logging
 
 ###########
 # Some POSIX / winos setups ((this needs to be moved out of here. FC should
@@ -110,7 +111,7 @@ class TSM(FC_entity.entity):
              if os.name=='posix':
                  subprocess.run(f'{copycmd} "{src_sys}" "{dst_sys}"', shell=True, check=False)
         except Exception as e:
-            print('ERROR: System error on copying TSM optfile - Have you created your FC_OPT dir and .opt files? ' + str(e))
+            logging.error('ERROR: System error on copying TSM optfile - Have you created your FC_OPT dir and .opt files? ' + str(e))
             
 
         #PROCESS CLASS OPTIONS SPECIFIC TO EXECUTION
@@ -133,9 +134,9 @@ class TSM(FC_entity.entity):
             errorlines = CmdErr.splitlines()
             
             for line in errorlines:
-                print(line)
+                logging.error(line)
         except OSError:
-            print('Warning: System error on subprocess, TSM entity '+self.Name+' failed command.')
+            logging.warning('Warning: System error on subprocess, TSM entity '+self.Name+' failed command.')
             return ['']
         return outputlines
     
@@ -289,7 +290,7 @@ class TSM(FC_entity.entity):
                 Dummyout.close()
                 Dummyerr.close()
             except OSError:
-                print('ERROR: System error on popen3() cannot copy TSM optfile - Have you created your FC_OPT dir and .opt files?')
+                logging.error('ERROR: System error on popen3() cannot copy TSM optfile - Have you created your FC_OPT dir and .opt files?')
         else:
             try:
                 #dbg('Using non-posix paths. Command is;\n\t'+copycmd+' \"'+TSM.tsmroot+TSM.optroot+self.Name+'.opt\" \"'+TSM.tsmroot+'dsm.opt\"',DBGBN)
@@ -298,7 +299,7 @@ class TSM(FC_entity.entity):
                 Dummyout.close()
                 Dummyerr.close()
             except OSError:
-                print('ERROR: System error on popen3() cannot copy TSM optfile - Have you created your FC_OPT dir and .opt files?')
+                logging.error('ERROR: System error on popen3() cannot copy TSM optfile - Have you created your FC_OPT dir and .opt files?')
 
         #dbg('done copyfile for dsm renaming',DBGBN)
         #PROCESS CLASS OPTIONS SPECIFIC TO EXECUTION
@@ -323,9 +324,9 @@ class TSM(FC_entity.entity):
             errorlines=CmdErr.readlines()
             CmdErr.close()
             for line in errorlines:
-                print(line)
+                logging.error(line)
         except OSError:
-            print('Warning: System error on popen(), TSM entity '+self.Name+' failed command.')
+            logging.warning('Warning: System error on popen(), TSM entity '+self.Name+' failed command.')
             return ['']
         return outputlines
     

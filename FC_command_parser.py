@@ -1,6 +1,7 @@
 
 import re
 import sys
+import logging
 from typing import List, Dict, Any, Tuple, Optional
 
 class CommandParser:
@@ -38,7 +39,7 @@ class CommandParser:
                     
                     commands.append(command_def)
         except Exception as e:
-            print(f"Error loading command defs: {e}")
+            logging.error(f"Error loading command defs: {e}")
             
         return commands
 
@@ -141,7 +142,7 @@ class CommandParser:
              
              match = re.match(r"self(\.([a-zA-Z0-9_]+))?\.([a-zA-Z0-9_]+)\((.*)\)", action_expr)
              if not match:
-                 print(f"Cannot parse action: {action_expr}")
+                 logging.error(f"Cannot parse action: {action_expr}")
                  return
                  
              attr = match.group(2) # e.g. EntityManager
@@ -154,12 +155,12 @@ class CommandParser:
                  target = getattr(self.app, attr, None)
                  
              if not target:
-                 print(f"Target object not found for {action_expr}")
+                 logging.error(f"Target object not found for {action_expr}")
                  return
                  
              method = getattr(target, method_name, None)
              if not method:
-                 print(f"Method {method_name} not found")
+                 logging.error(f"Method {method_name} not found")
                  return
                  
              # Resolve arguments
@@ -173,7 +174,7 @@ class CommandParser:
              method(*resolved_args)
                  
         except Exception as e:
-            print(f"Error executing action {action_expr}: {e}")
+            logging.error(f"Error executing action {action_expr}: {e}")
 
     def _split_args(self, args_str: str) -> List[str]:
         if not args_str.strip():

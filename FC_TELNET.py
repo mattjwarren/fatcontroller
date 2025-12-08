@@ -1,4 +1,5 @@
 import FC_entity
+import logging
 try:
     import telnetlib
 except ImportError:
@@ -77,7 +78,7 @@ class TELNET(FC_entity.entity):
             return C
         except (telnetlib.socket.gaierror, telnetlib.socket.error):
             TELNET.Connections[self.Name]=self.Name
-            print('Warning: TELNET entity '+self.Name+' could not open telnet connection to '+self.TCPAddress+':'+self.TCPPort)
+            logging.warning('Warning: TELNET entity '+self.Name+' could not open telnet connection to '+self.TCPAddress+':'+self.TCPPort)
             return self.Name
         
     ###########
@@ -99,7 +100,7 @@ class TELNET(FC_entity.entity):
                         retkey='^D'
                     else:
                         retkey='^Z'
-                    print('\nTELNET entity '+self.Name+' entering INTERACT mode. Use '+retkey+' to come back\n')
+                    logging.info('\nTELNET entity '+self.Name+' entering INTERACT mode. Use '+retkey+' to come back\n')
                     C.mt_interact()
                     return ['']
                 else:
@@ -121,9 +122,9 @@ class TELNET(FC_entity.entity):
                                 #dbg('missed',DBGBN)
                             Abort=2
                         except (telnetlib.socket.error, EOFError):
-                            print('Info: TELNET entity '+self.Name+' had trouble. Reseting connection.')
+                            logging.info('Info: TELNET entity '+self.Name+' had trouble. Reseting connection.')
                             if Abort:
-                                print('Warning: TELNET entity '+self.Name+' connection aborted.')
+                                logging.warning('Warning: TELNET entity '+self.Name+' connection aborted.')
                                 C=self.Name
                                 return ['']
                             C=TELNET.Connections[self.Name]=self.openconnection()
@@ -133,7 +134,7 @@ class TELNET(FC_entity.entity):
                 if TELNET.Opts['ShowRawTelnet'] =='yes':
                     C.set_debuglevel(0)
             else:
-                print('Info: Entity failed to initialise telnet; retrying')
+                logging.info('Info: Entity failed to initialise telnet; retrying')
             try:
                 #dbg('making connection...',DBGBN)
                 C=TELNET.Connections[self.Name]=telnetlib.Telnet(self.TCPAddress)
@@ -187,7 +188,7 @@ class TELNET(FC_entity.entity):
                 return  Output
             except (telnetlib.socket.gaierror, telnetlib.socket.error):
                 TELNET.Connections[self.Name]=self.Name
-                print('Warning: TELNET entity '+self.Name+' could not open telnet connection to '+self.TCPAddress+':'+self.TCPPort)
+                logging.warning('Warning: TELNET entity '+self.Name+' could not open telnet connection to '+self.TCPAddress+':'+self.TCPPort)
                 return ['']
             
     def display(self,LineList,OutputCtrl):

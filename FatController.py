@@ -31,7 +31,34 @@ class GuiHandler(logging.Handler):
         
     def emit(self, record):
         msg = self.format(record)
-        self.output_formatter.infodisplay('DBG:'+record.name+': '+msg)
+        # Avoid recursive logging if infodisplay logs
+        try:
+             self.output_formatter.infodisplay('DBG:'+record.name+': '+msg)
+        except Exception:
+             self.handleError(record)
+
+class TextHandler(logging.Handler):
+    """This class allows you to log to a Tkinter Text or ScrolledText widget"""
+    def __init__(self, text):
+        super().__init__()
+        self.text = text
+
+    def emit(self, record):
+        msg = self.format(record)
+        def append():
+            self.text.configure(state='normal')
+            self.text.insert(tk.END, msg + '\n')
+            self.text.configure(state='disabled')
+            self.text.see(tk.END)
+        # Check if we are in main thread, if not use after? 
+        # For simplicity in this Tkinter app, we assume logging happens where GUI is accessible 
+        # or we use a queue if it crashes. But Python 3 Tkinter is thread-tolerant enough for simple inserts usually, 
+        # or we should use .after. Let's use .after to be safe if called from threads.
+        try:
+             self.text.after(0, append)
+        except Exception:
+             # If widget is destroyed or not ready
+             self.handleError(record)
 
 
 class FatController(tk.Tk):
@@ -60,7 +87,7 @@ class FatController(tk.Tk):
              self.CommandDefinitions = self.CommandParser.parse_command_defs(self.installroot+'FatControllerCommands.sav')
         except Exception as e:
              # messagebox.showerror("Error", f"Could not load command definitions: {e}")
-             print(f"Error loading command definitions: {e}")
+             logging.error(f"Error loading command definitions: {e}")
              self.CommandDefinitions = []
 
         #############
@@ -98,6 +125,21 @@ class FatController(tk.Tk):
         self.FirstPageTextCtrl = tk.Text(self.FirstPagePanel, wrap=tk.WORD)
         self.FirstPageTextCtrl.pack(fill=tk.BOTH, expand=True)
         self.FirstPageTextCtrl.insert(tk.END, startmessage + '\n')
+
+        # Create Logs Tab (Before configuring logging)
+        self.LogsPanel = ttk.Frame(self.OutBook)
+        self.OutBook.add(self.LogsPanel, text='LOGS')
+        
+        self.LogsTextCtrl = tk.Text(self.LogsPanel, wrap=tk.NONE, state='disabled')
+        # Add scrollbars
+        self.LogsScrollY = ttk.Scrollbar(self.LogsPanel, orient=tk.VERTICAL, command=self.LogsTextCtrl.yview)
+        self.LogsScrollX = ttk.Scrollbar(self.LogsPanel, orient=tk.HORIZONTAL, command=self.LogsTextCtrl.xview)
+        self.LogsTextCtrl.configure(yscrollcommand=self.LogsScrollY.set, xscrollcommand=self.LogsScrollX.set)
+        
+        self.LogsScrollY.pack(side=tk.RIGHT, fill=tk.Y)
+        self.LogsScrollX.pack(side=tk.BOTTOM, fill=tk.X)
+        self.LogsTextCtrl.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
         
         # Shell
         self.ShellTextCtrl = tk.Text(self.BLPanel, height=10)
@@ -111,9 +153,36 @@ class FatController(tk.Tk):
         self.display=FC_formatter.OutputFormatter(self.OutBook, self.ShellEntry)
         self.display.set_text_widget(self.FirstPageTextCtrl) # Hook up General tab
         
-        # Setup Logging to GUI
+        # Setup Logging
+        # 1. GUI Handler (Old style to General Tab - keep info/debug separate?)
+        # User requested "text panel that dispaly all logging output".
         self.gui_handler = GuiHandler(self.display)
-        logging.getLogger().addHandler(self.gui_handler)
+        
+        # 2. Text Handler for LOGS tab
+        self.text_handler = TextHandler(self.LogsTextCtrl)
+        self.text_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+        
+        # 3. File Handler
+        try:
+             log_path = config.log_file if config.log_file else 'logs.txt'
+             # If just filename, put in cwd or install root? "going to both a file called logs.txt"
+             # config.py defines data paths. Let's use simple filename in CWD as per typical simple request, or relative to run.
+             self.file_handler = logging.FileHandler(log_path, mode='a')
+             self.file_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+        except Exception as e:
+             logging.error(f"Failed to setup file logging: {e}")
+             self.file_handler = None
+
+        root_logger = logging.getLogger()
+        root_logger.setLevel(logging.DEBUG) # Catch everything
+        
+        # Add handlers
+        root_logger.addHandler(self.gui_handler)
+        root_logger.addHandler(self.text_handler)
+        if self.file_handler:
+            root_logger.addHandler(self.file_handler)
+            
+        logging.info("Logging initialized. Writing to file: " + (config.log_file))
         # Ensure message propagation doesn't duplicate if multiple handlers (basicConfig added one to stderr)
         # We want stderr too probably for dev? Yes, basicConfig handles that.
 
@@ -622,7 +691,7 @@ class FatController(tk.Tk):
             CommandList=[Command]
             
         for Command in CommandList:
-            print("Command is:",Command)
+            logging.debug(f"Command is: {Command}")
             Command=self.processsubstitutions(Command)  #  if ! aliascmd then flow is,  RawCmd->subbed->executed
                                     # is IS aliascmd then flow is   RawCmd->Subbed->aliashit->subbed->executed
             self.dbg('After Substitution: '+Command,DBGBN)
@@ -671,7 +740,7 @@ class FatController(tk.Tk):
         #EntityManager=FC_entitymanager.entitymanager()
         self.aliases={} #Is this right?
         try:
-            print("DEBUGMJW: "+self.installroot+Profile+'.sav')
+            logging.debug("DEBUGMJW: "+self.installroot+Profile+'.sav')
             FileToLoad=open(self.installroot+Profile+'.sav')
             for Line in FileToLoad:
                 self.processcommand(Line)
@@ -686,6 +755,9 @@ class FatController(tk.Tk):
         self.DaemonManager.handlealert(fromalert,toalert+1)
 
 
-if __name__ == "__main__":
+def main():
     app = FatController()
     app.mainloop()
+
+if __name__ == "__main__":
+    main()
