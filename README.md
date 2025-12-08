@@ -67,24 +67,23 @@ Once FatController is running, you can use the command bar at the bottom to defi
 
 ## 🕰️ A Note from the Developer
 
-> "This was my first main Python program, started over 20 years ago."
+> "This was my first main Python program, started 25 years ago."
 
-FatController (originally *v0.0.1a*) was born in an era where Python 2 was king and I was just starting my journey into software development. For years, it served as a trusty tool in my day job, helping manage complex system administration tasks with a quirky but effective custom interface.
+FatController (originally *v0.0.1a*) was born in an era where Python 2 emerged into the world and I was just starting my journey into software development. For years, it served as a trusty tool in my day job, helping manage complex system administration tasks with a quirky but effective custom interface. The code was crappy, but it worked, and that was good enough...
 
-Like many passion projects, it sat dormant for a while... until now.
+Like many passion projects, it sat dormant for a (looong) while... until now.
 
 ### 🤖 Resurrected with AI
-With the help of **Google Antigravity** (an advanced AI agent), FatController is being brought back to life and modernized. We are:
+With the help of **Google Antigravity** (+ others tbh, but mostly AntiGravity so far), FatController is being brought back to life and modernized. We are:
 - 🐍 Migrating from Python 2 to Python 3.13.
 - 🖼️ Replacing the legacy `wxPython` GUI with a native `tkinter` interface.
 - 🔐 Implementing modern security practices (goodbye `eval()`, hello `paramiko`!).
 - 🧪 Adding comprehensive unit tests and CI/CD workflows.
+- And all the things I always imagined it should do.  Like update all your documentation for you on the fly (oh look, LLM's have appeared ...)
 
 ### 🔮 The Future: AI Agents
 The most exciting part of this resurrection is the potential for **LLM Agent Entities**. Imagine defining an entity not just for a server, but for an *AI Agent* that can reason, plan, and execute tasks autonomously within the FatController framework. 
 
-The tool that automated my job 20 years ago is evolving to automate the jobs of the future.
+The tool that automated my job 25 years ago is evolving to automate the jobs of the future.
 
 ---
-
-*Copyright (c) 2005-2025 Matthew Warren*
