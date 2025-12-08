@@ -143,11 +143,13 @@ class FatController(tk.Tk):
         
         # Shell
         self.ShellTextCtrl = tk.Text(self.BLPanel, height=10)
+        self.ShellTextCtrl.configure(state='disabled')
         self.ShellTextCtrl.pack(fill=tk.BOTH, expand=True)
         # Entry for command
         self.ShellEntry = tk.Entry(self.BLPanel)
         self.ShellEntry.pack(fill=tk.X)
         self.ShellEntry.bind('<Return>', self.ShellWindowEnterEvent)
+        self.ShellEntry.bind('<KP_Enter>', self.ShellWindowEnterEvent)
         self.ShellEntry.focus_set()
 
         self.display=FC_formatter.OutputFormatter(self.OutBook, self.ShellEntry)
@@ -201,7 +203,9 @@ class FatController(tk.Tk):
         #
         self.prompt=''
         self.prompt='FC:'+self.EntityManager.LastExecutedEntity+'> '
+        self.ShellTextCtrl.configure(state='normal')
         self.ShellTextCtrl.insert(tk.END, self.prompt + '\n')
+        self.ShellTextCtrl.configure(state='disabled')
 
         # Tree Control
         self.ObjectTreeCtrl = ttk.Treeview(self.RSplitter)
@@ -241,27 +245,33 @@ class FatController(tk.Tk):
             Ctrl.insert(RootNode, "end", text=str(item))
 
     def ShellWindowEnterEvent(self, event):
-        CommandInput = self.ShellEntry.get()
-        # if len(CommandInput)<len(self.prompt):
-        #     CommandInput=self.prompt+CommandInput
-        # InputCommand=CommandInput[len(self.prompt):]
-        # Tkinter entry just has the input, prompt is in text ctrl
-        InputCommand = CommandInput
-        
-        self.ShellTextCtrl.insert(tk.END, self.prompt + InputCommand + '\n')
-        self.ShellTextCtrl.see(tk.END)
-        
-        self.processcommand(InputCommand)
-        
-        # Check alerts
-        if len(self.DaemonManager.getOutstandingAlerts())>0:
-            self.ShellTextCtrl.config(bg='#ffcccc') # Light red
-        else:
-            self.ShellTextCtrl.config(bg='white')
+        try:
+            CommandInput = self.ShellEntry.get()
             
-        self.prompt='FC:'+self.EntityManager.LastExecutedEntity+'> '
-        self.ShellEntry.delete(0, tk.END)
-        # self.ShellTextCtrl.insert(tk.END, self.prompt)
+            # if len(CommandInput)<len(self.prompt):
+            #     CommandInput=self.prompt+CommandInput
+            # InputCommand=CommandInput[len(self.prompt):]
+            # Tkinter entry just has the input, prompt is in text ctrl
+            InputCommand = CommandInput
+            
+            self.ShellTextCtrl.configure(state='normal')
+            self.ShellTextCtrl.insert(tk.END, self.prompt + InputCommand + '\n')
+            self.ShellTextCtrl.see(tk.END)
+            self.ShellTextCtrl.configure(state='disabled')
+            
+            self.processcommand(InputCommand)
+            
+            # Check alerts
+            if len(self.DaemonManager.getOutstandingAlerts())>0:
+                self.ShellTextCtrl.config(bg='#ffcccc') # Light red
+            else:
+                self.ShellTextCtrl.config(bg='white')
+                
+            self.prompt='FC:'+self.EntityManager.LastExecutedEntity+'> '
+            self.ShellEntry.delete(0, tk.END)
+            # self.ShellTextCtrl.insert(tk.END, self.prompt)
+        except Exception as e:
+            logging.error(f"ERROR in ShellWindowEnterEvent: {e}")
 
     ###########
     #

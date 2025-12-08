@@ -26,8 +26,12 @@ class OutputFormatter(object):
             msg = [msg]
         
         if switchfocus:
-            # self.notebook.select(0) # Tkinter 
-            pass # Let's not force switch focus for now, or implement if notebook is valid
+            try:
+                # logging.info("DEBUG_MJW: Switching tab input focus")
+                self.notebook.select(0) 
+            except Exception as e:
+                # logging.error(f"DEBUG_MJW: Failed to switch tab: {e}")
+                pass 
 
         bullet = ' * '
         for line in msg:
@@ -47,8 +51,24 @@ class OutputFormatter(object):
                 fline = line.rstrip() + '\n'
             
             if self.text_widget:
+                old_state = self.text_widget['state']
+                message_matches_shell = False
+                
+                # Check if this widget is the ShellTextCtrl (which we might have disabled)
+                # FC_formatter doesn't 'know' which widget it is, but we can just force enable/disable if needed
+                # However, FirstPageTextCtrl is typically NOT disabled. ShellTextCtrl IS.
+                # Currently self.text_widget is set to FirstPageTextCtrl (General Tab).
+                # But wait, does ShellTextCtrl get written to via this?
+                # No, ShellTextCtrl is only for command history echo in this app version.
+                # BUT, let's be safe.
+                if old_state == 'disabled':
+                     self.text_widget.configure(state='normal')
+                     
                 self.text_widget.insert(tk.END, fline)
                 self.text_widget.see(tk.END)
+                
+                if old_state == 'disabled':
+                     self.text_widget.configure(state='disabled')
         
         if self.focus_return:
             self.focus_return.focus_set()
