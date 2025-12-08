@@ -45,6 +45,11 @@ Tasks are specific commands assigned to a daemon. They can be simple commands or
 **Entity Specific Examples:**
 - **LOCAL**: `define entity LOCAL <name>`
 - **SSH**: `define entity SSH <name> <hostname> <user> <password> <keyfile>`
+    - `name`: Unique name for the entity
+    - `hostname`: IP or hostname of remote server
+    - `user`: SSH username
+    - `password`: SSH password (or anything if using keyfile only)
+    - `keyfile`: Absolute path to Private Key file (or 'None')
 - **ENTITYGROUP**: `define entity ENTITYGROUP <name> <member1> <member2> ...`
 
 ### Aliases & Substitutions
