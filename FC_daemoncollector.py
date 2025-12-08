@@ -1,4 +1,5 @@
 import re,FC_daemonalert,time
+import logging
 
 ###########
 # START OF CLASS daemoncollector
@@ -54,7 +55,7 @@ class daemoncollector:
             if switchmode>0:
                 switchmode=switchmode-1
             else:
-                print("MJW: line from scheduled tast is",line)
+                logging.debug(f"MJW: line from scheduled tast is {line}")
             if re.search(self.datatag,line):
                 #we have a hit, shall I count it?
                 if str(skiplines)=='COUNT':

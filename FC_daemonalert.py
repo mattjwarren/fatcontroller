@@ -12,7 +12,7 @@ class daemonalert:
         self.AlertManager=alertmanager
         self.pass_script=pass_script
         self.fail_script=fail_script
-	#print "pass_Script=",pass_script,"fail_script=",fail_script#list of cmdlines
+        #print "pass_Script=",pass_script,"fail_script=",fail_script#list of cmdlines
 
     def setmin(self,min):
         self.minimum=float(min)
@@ -40,7 +40,7 @@ class daemonalert:
             else:
                 if self.pass_script!='NoScript':
                     self.AlertManager.ExecuteScript(self.pass_script,entity)
-		
+        pass
 
     def getalert(self):
         return [str(self.minimum),str(self.maximum),self.message,self.pass_script,self.fail_script]

@@ -1,3 +1,4 @@
+import logging
 class AlertManager:
     def __init__(self,EntityManager,processcommander):
         self.AlertQueue=[] # append message,id tuples
@@ -21,7 +22,7 @@ class AlertManager:
         try:
             del self.AlertQueue[start:end]
         except:
-            print("Problem handling alert range ",start,"-",end-1)
+            logging.error(f"Problem handling alert range {start}-{end-1}")
         ents=[]
         for alert in self.AlertQueue:
             ents.append(alert[1])

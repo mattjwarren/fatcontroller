@@ -21,6 +21,7 @@ get it added to the tasks to be run.
 
 from threading import Thread, Event
 import time
+import logging
 #from exception import IOError
 
 class ThreadedScheduler(Thread):
@@ -333,7 +334,7 @@ class ThreadedScheduler(Thread):
         Terminate all running tasks.
         """
         for i in list(self._running.keys()):
-            print("Stopping ",i)
+            logging.info(f"Stopping {i}")
             self.stopTask(i)
 
     def disableTask(self, name):

@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "FatController"
+version = "1.11.1"
+description = "FatController - A daemon management and automation tool"
+readme = "README.txt"
+requires-python = ">=3.7"
+dependencies = [
+    "paramiko>=2.0.0"
+]
+authors = [
+  {name = "Matthew Warren", email = "matthew_j_warren@hotmail.com"}
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-mock",
+    "pytest-cov"
+]
+
+[project.scripts]
+FatController = "FatController:main"
+
+[tool.setuptools]
+py-modules = [
+    "FatController",
+    "FC_AlertManager",
+    "FC_command_parser",
+    "FC_daemon",
+    "FC_daemonalert",
+    "FC_daemoncollector",
+    "FC_daemonmanager",
+    "FC_daemonschedule",
+    "FC_daemontask",
+    "FC_DUMB",
+    "FC_entity",
+    "FC_ENTITYGROUP",
+    "FC_entitymanager",
+    "FC_formatter",
+    "FC_LOCAL",
+    "FC_ScheduledTask",
+    "FC_ScheduledTaskHandler",
+    "FC_SSH",
+    "FC_TELNET",
+    "FC_ThreadedScheduler",
+    "FC_TSM",
+    "config"
+]

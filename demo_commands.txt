@@ -1,0 +1,4 @@
+# Demo command file for FatController
+message "Starting demo..."
+show entities
+message "Demo complete."

@@ -24,7 +24,10 @@ class ENTITYGROUP(FC_entity.entity):
 
     def display(self,LineList,OutputCtrl):
         for line in LineList:
-            OutputCtrl.AppendText(line.rstrip()+"\n")
+            try:
+                OutputCtrl.insert("end", line.rstrip()+"\n")
+            except:
+                pass
         return
 
     def getparameterdefs(self):
