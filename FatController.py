@@ -660,6 +660,38 @@ class FatController(tk.Tk):
         self.EntityManager.delete(EntityName)
         self.display.infodisplay('Entity '+EntityName+' Deleted.')
 
+    def read_command_file(self, filename: str) -> None:
+        """Reads a file and executes commands line by line."""
+        try:
+            # Handle relative paths (assume relative to cwd which usually includes installroot)
+            if not os.path.isabs(filename):
+                 # Try current dir first, then install root ?
+                 # User request says "take a filename", usually implies cwd or full path.
+                 # Let's try direct open first which respects cwd.
+                 pass
+            
+            if not os.path.exists(filename):
+                 self.display.infodisplay(f"Error: File '{filename}' not found.")
+                 return
+
+            with open(filename, 'r') as f:
+                lines = f.readlines()
+                
+            self.display.infodisplay(f"Reading commands from {filename}...")
+            
+            for line in lines:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
+                self.processcommand(line)
+                
+            self.display.infodisplay(f"Finished reading {filename}.")
+                
+        except Exception as e:
+            self.display.infodisplay(f"Error reading file {filename}: {e}")
+            logging.error(f"Error reading command file {filename}: {e}")
+
+
     def ComprehendCommand(self, Command): 
         #ok, only (usually) makes sense to have one set of [[]]'s so
         #split out the middle
