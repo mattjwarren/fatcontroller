@@ -24,18 +24,7 @@ fcversion="v1f11r1a"
 __version__ = fcversion
 
 startmessage='Welcome to FatController '+fcversion
-class GuiHandler(logging.Handler):
-    def __init__(self, output_formatter):
-        super().__init__()
-        self.output_formatter = output_formatter
-        
-    def emit(self, record):
-        msg = self.format(record)
-        # Avoid recursive logging if infodisplay logs
-        try:
-             self.output_formatter.infodisplay('DBG:'+record.name+': '+msg)
-        except Exception:
-             self.handleError(record)
+
 
 class TextHandler(logging.Handler):
     """This class allows you to log to a Tkinter Text or ScrolledText widget"""
@@ -156,9 +145,7 @@ class FatController(tk.Tk):
         self.display.set_text_widget(self.FirstPageTextCtrl) # Hook up General tab
         
         # Setup Logging
-        # 1. GUI Handler (Old style to General Tab - keep info/debug separate?)
-        # User requested "text panel that dispaly all logging output".
-        self.gui_handler = GuiHandler(self.display)
+
         
         # 2. Text Handler for LOGS tab
         self.text_handler = TextHandler(self.LogsTextCtrl)
@@ -179,7 +166,7 @@ class FatController(tk.Tk):
         root_logger.setLevel(logging.DEBUG) # Catch everything
         
         # Add handlers
-        root_logger.addHandler(self.gui_handler)
+
         root_logger.addHandler(self.text_handler)
         if self.file_handler:
             root_logger.addHandler(self.file_handler)
@@ -690,6 +677,41 @@ class FatController(tk.Tk):
         except Exception as e:
             self.display.infodisplay(f"Error reading file {filename}: {e}")
             logging.error(f"Error reading command file {filename}: {e}")
+
+    def clear_output_panel(self) -> None:
+        """Clears the text content of the currently selected tab."""
+        try:
+            # Get selected tab
+            selected_tab_id = self.OutBook.select()
+            if not selected_tab_id:
+                return
+            
+            # Get widget for tab
+            tab_frame = self.OutBook.nametowidget(selected_tab_id)
+            
+            # Find Text widget children
+            for child in tab_frame.winfo_children():
+                if isinstance(child, tk.Text):
+                    # Check state
+                    old_state = child['state']
+                    if old_state == 'disabled':
+                        child.configure(state='normal')
+                        
+                    child.delete('1.0', tk.END)
+                    
+                    if old_state == 'disabled':
+                        child.configure(state='disabled')
+                        
+                    # Usually only one text widget per tab, so can break
+                    # But checking all just in case
+                    # break 
+            
+            # self.display.infodisplay("Cleared output panel.") # Would just re-add text immediately? 
+            # command echo in shell will verify command ran.
+            
+        except Exception as e:
+            logging.error(f"Error clearing output panel: {e}")
+            # self.display.infodisplay(f"Error clearing panel: {e}")
 
 
     def ComprehendCommand(self, Command): 

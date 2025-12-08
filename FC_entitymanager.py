@@ -143,13 +143,16 @@ class entitymanager:
                 # We need to store logic to access this.
                 # Old code used list: [panel, textctrl, sizer, number]
                 # We'll use a dict
+                # Robust way to get index: it's the last one we added
+                current_tab_index = self.OutBook.index('end') - 1
+                
                 self.OutPages[EntityName] = {
                     'frame': tab_frame,
                     'text': text_widget,
-                    'tab_id': self.HighestPageNumber # Index
+                    'tab_id': current_tab_index
                 }
                 
-                self.HighestPageNumber+=1
+                self.HighestPageNumber+=1 # Keep for legacy if needed, or remove? Unused mostly now.
                 
         except Exception as e:
             self.display.infodisplay('Exception caught in entitymanager define: ' + str(e))
@@ -164,7 +167,8 @@ class entitymanager:
             
             # Select the tab
             try:
-                self.OutBook.select(self.OutPages[EntityName]['tab_id'])
+                if EntityType != 'ENTITYGROUP':
+                    self.OutBook.select(self.OutPages[EntityName]['tab_id'])
             except:
                 pass
                 

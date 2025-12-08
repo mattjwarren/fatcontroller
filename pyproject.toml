@@ -15,6 +15,13 @@ authors = [
   {name = "Matthew Warren", email = "matthew_j_warren@hotmail.com"}
 ]
 
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-mock",
+    "pytest-cov"
+]
+
 [project.scripts]
 FatController = "FatController:main"
 

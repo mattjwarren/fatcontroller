@@ -71,6 +71,7 @@ show scripts create:self.showscripts('all')
 message input:'<<'!='' +* create:self.message(SplitCmd[1:])
 msg input:'<<'!='' +* create:self.message(SplitCmd[1:])
 readfile input:'<<'!='' create:self.read_command_file(SplitCmd[1])
+clear create:self.clear_output_panel()
 ENDCOMMANDDEFS
 #
 #Copyright 2005 MatthewWarren.
