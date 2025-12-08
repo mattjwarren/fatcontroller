@@ -1,60 +1,89 @@
-import FC_LOCAL,FC_TSM,FC_TELNET,FC_DUMB,FC_ENTITYGROUP,wx, FC_SSH
+
+import FC_LOCAL,FC_TSM,FC_TELNET,FC_DUMB,FC_ENTITYGROUP, FC_SSH
 import FC_formatter
+import tkinter as tk
+from tkinter import ttk
+
 ###########
 # START OF CLASS entitymanager
 #
 
+imageroot='./' # simplified for now
 
-imageroot='/home/matt/yab/'
 class entitymanager:
 
 #
 #Method functions
 #
-    def __init__(self,OutputNotebook,FocusReturnCtrl):
+    def __init__(self, OutputNotebook, FocusReturnCtrl):
         self.Entities={} #dict of entity objects
-        self.OutBook=OutputNotebook
-        self.OutPages={} #entity name keyed, value is page for output
-
-        #img=wx.Image('c:\\program files\\yab\\fatcontroller\\redalert.jpg', wx.BITMAP_TYPE_JPEG)
-        img=wx.Image(imageroot+'FatController/redalert.jpg', wx.BITMAP_TYPE_JPEG)
-        self.RedBMP=wx.BitmapFromImage(img)
-        img=wx.Image(imageroot+'FatController/yellowalert.jpg', wx.BITMAP_TYPE_JPEG)
-        self.AmberBMP=wx.BitmapFromImage(img)
-        img=wx.Image(imageroot+'FatController/greenalert.jpg', wx.BITMAP_TYPE_JPEG)
-        self.GreenBMP=wx.BitmapFromImage(img)
-        self.AlertImageList=wx.ImageList(12,12)
-        self.AlertImageList.Add(self.RedBMP)
-        self.AlertImageList.Add(self.AmberBMP)
-        self.AlertImageList.Add(self.GreenBMP)
-        self.OutBook.SetImageList(self.AlertImageList)
+        self.OutBook = OutputNotebook # This is now a ttk.Notebook
+        self.OutPages={} #entity name keyed, value is dict or list info
+        
+        # We will skip image loading for now or implement it later with Pillow if needed
+        # For alerts we will stick to text indicators in tab titles
+        
         self.ReturnFocus=FocusReturnCtrl
                 
         self.LastExecutedEntity=''
-        self.GeneralPage=OutputNotebook.GetPage(0).GetChildren()[0]
+        
+        # In Tkinter, we assume OutputNotebook is already set up.
+        # The 'GENERAL' tab is index 0.
+        # We need to find the text widget in it.
+        # Let's assume FatController sets up the GENERAL tab and passes the Text widget via the Formatter,
+        # or we find it.
+        # But wait, self.display uses OutputFormatter.
+        # OutputFormatter now expects a set_text_widget call or we pass it.
+        
+        pass # We will rely on define() to create tabs
+        
+        # self.GeneralPage=OutputNotebook.GetPage(0).GetChildren()[0] # Old generic way
+        # In new FatController, we will pass the "General" text widget or formatter will know it.
+        
         self.HighestPageNumber=1 #post increment. first is 1
-        self.display=FC_formatter.OutputFormatter(OutputNotebook,self.ReturnFocus)
+        self.display=FC_formatter.OutputFormatter(OutputNotebook, self.ReturnFocus)
+        # We need to hook up the general tab text widget to the formatter
+        # We'll assume the caller (FatController) handles the initial set_text_widget for the general tab?
+        # Or we can find it.
+        try:
+             # Assuming the first tab is General and has a Text frame
+             frame = self.OutBook.nametowidget(self.OutBook.tabs()[0])
+             text_widget = frame.winfo_children()[0]
+             self.display.set_text_widget(text_widget)
+        except Exception:
+             pass
 
-    def SetAlertStatus(self,EntityName):
-        self.OutBook.SetPageImage(self.OutPages[EntityName][3]-1,0)
-        #self.OutBook.GetPage(self.OutPages[EntityName][3]-1).SetBackgroundColour(wx.Colour(255,200,200))
+    def SetAlertStatus(self, EntityName):
+        # self.OutBook.SetPageImage(self.OutPages[EntityName][3]-1,0)
+        # Change tab title to indicate alert
+        try:
+            tab_id = self.OutPages[EntityName]['tab_id']
+            # current_text = self.OutBook.tab(tab_id, "text")
+            self.OutBook.tab(tab_id, text="[!] " + EntityName)
+        except:
+            pass
 
-    def ClearAlertStatus(self,EntityName):
-        self.OutBook.SetPageImage(self.OutPages[EntityName][3]-1,2)
-        #self.OutBook.GetPage(self.OutPages[EntityName][3]-1).SetBackgroundColour(wx.Colour(25,25,25))
+    def ClearAlertStatus(self, EntityName):
+        # self.OutBook.SetPageImage(self.OutPages[EntityName][3]-1,2)
+        try:
+            tab_id = self.OutPages[EntityName]['tab_id']
+            self.OutBook.tab(tab_id, text=EntityName)
+        except:
+            pass
 
 
-    def getentitytype(self,EntityName):
+    def getentitytype(self, EntityName: str) -> str:
         return self.Entities[EntityName].getentitytype()
         
-    def getentitylist(self):
+    def getentitylist(self) -> dict:
         return self.Entities
         
     def getentityparms(self,EntityName):
         return self.Entities[EntityName].getparameterstring()
 
     # # Need to change this, coupling between entitymanager and entities. Shouldnt need to know numb of parms needed
-    def define(self,type,typeparms):                                #TSMServer tpyeparms;    ['name','adminuser','adminpass']
+    def define(self, type: str, typeparms: list) -> None:                                #TSMServer tpyeparms;    ['name','adminuser','adminpass']
+        EntityName = None
         if type=='TSM':                                 #becomes Entites{'name',['adminuser','adminpass']}
             if len(typeparms)==6:
                 EntityName=typeparms[0]
@@ -96,37 +125,52 @@ class entitymanager:
             self.display.infodisplay('Entity: ENTITYGROUP '+self.Entities[EntityName].getname()+" "+self.Entities[EntityName].getparameterstring()+" defined.")
         else:
             self.display.infodisplay('Error: Don\'t know how to define '+type+' entities.')
-        #Now attatch an output page
+            
+        #Now attach an output page
         try:
             if EntityName:
-                self.OutPages[EntityName]=[wx.Panel(self.OutBook,style=wx.NO_BORDER)]
-                self.OutBook.AddPage(self.OutPages[EntityName][0],EntityName,True,-1)
+                # Create a frame for the tab
+                tab_frame = ttk.Frame(self.OutBook)
+                self.OutBook.add(tab_frame, text=EntityName)
+                
+                # Create text widget
+                text_widget = tk.Text(tab_frame, wrap=tk.WORD, width=80, height=24)
+                text_widget.pack(expand=True, fill='both')
+                
+                text_widget.insert(tk.END, 'Entity Defined.\n')
+                
+                # Store info
+                # We need to store logic to access this.
+                # Old code used list: [panel, textctrl, sizer, number]
+                # We'll use a dict
+                self.OutPages[EntityName] = {
+                    'frame': tab_frame,
+                    'text': text_widget,
+                    'tab_id': self.HighestPageNumber # Index
+                }
+                
                 self.HighestPageNumber+=1
-                self.OutPages[EntityName].append(wx.TextCtrl(self.OutPages[EntityName][0],-1,'Entity Defined.\n',(0,0),(0,0),wx.TE_MULTILINE|wx.TE_DONTWRAP|wx.TE_RICH2))
-                self.OutPages[EntityName][1].SetOwnFont(wx.Font(8,wx.FONTFAMILY_MODERN,wx.FONTSTYLE_NORMAL,wx.FONTWEIGHT_NORMAL))
-                self.OutPages[EntityName].append(wx.BoxSizer(wx.VERTICAL))
-                self.OutPages[EntityName].append(self.HighestPageNumber)
-                #0=wxpanel,1=textctrl,2=sizer,3=number(-1)=pgindex
-                self.OutBook.SetPageImage(self.HighestPageNumber-1,2)
-                self.OutPages[EntityName][2].Add(self.OutPages[EntityName][1],1,wx.EXPAND,5)
-                self.OutPages[EntityName][0].SetSizer(self.OutPages[EntityName][2])
-                self.OutPages[EntityName][1].SetAutoLayout(True)
-                self.OutPages[EntityName][2].Fit(self.OutPages[EntityName][0])
-                self.OutPages[EntityName][2].Layout()
-        except UnboundLocalError as NameError:
-            self.display.infodisplay('Exception caught in entitymanager define')
+                
+        except Exception as e:
+            self.display.infodisplay('Exception caught in entitymanager define: ' + str(e))
             pass
 
 
-    def execute(self,EntityName,CmdList):
+    def execute(self, EntityName: str, CmdList: list) -> None:
         DBGBN='entitymanagerexecute'
         try:
             EntityType=self.Entities[EntityName].getentitytype()
             output=self.Entities[EntityName].execute(CmdList) #list of output returned
-            self.OutBook.SetSelection(self.OutPages[EntityName][3]-1)
-            self.Entities[EntityName].display(output,self.OutPages[EntityName][1])
-            self.OutPages[EntityName][1].ScrollLines(1)
-            self.ReturnFocus.SetFocus()
+            
+            # Select the tab
+            try:
+                self.OutBook.select(self.OutPages[EntityName]['tab_id'])
+            except:
+                pass
+                
+            self.Entities[EntityName].display(output, self.OutPages[EntityName]['text'])
+            self.OutPages[EntityName]['text'].see(tk.END)
+            self.ReturnFocus.focus_set()
             self.LastExecutedEntity=EntityName
         except KeyError:
             self.display.infodisplay('Error:    Don\'t know how to execute commands for '+EntityName+'.')
@@ -138,12 +182,13 @@ class entitymanager:
 
     def display(self,EntityName,OutputList):
         #self.display.infodisplay('Changing page selected index to '+str(self.OutPages[EntityName][3]))
-        self.OutBook.SetSelection(self.OutPages[EntityName][3]-1)
-        self.Entities[EntityName].display(OutputList,self.OutPages[EntityName][1])
-        self.OutPages[EntityName][1].ScrollLines(1)
-        #self.OutBook.Update()
-        self.ReturnFocus.SetFocus()
-        #self.fixpagestyle(self.OutPages[EntityName][1])
+        try:
+            self.OutBook.select(self.OutPages[EntityName]['tab_id'])
+            self.Entities[EntityName].display(OutputList, self.OutPages[EntityName]['text'])
+            self.OutPages[EntityName]['text'].see(tk.END)
+            self.ReturnFocus.focus_set()
+        except:
+             pass
 
     def show(self):
         for e in self.Entities:
@@ -165,7 +210,7 @@ class entitymanager:
     def delete(self,EntityName):
         del self.Entities[EntityName]
 
-    def isEntity(self,EntityName):
+    def isEntity(self, EntityName: str) -> int:
         try:
             self.Entities[EntityName]
             return 1

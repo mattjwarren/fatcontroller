@@ -333,7 +333,7 @@ class ThreadedScheduler(Thread):
         Terminate all running tasks.
         """
         for i in list(self._running.keys()):
-            print("Stopping ",i)
+            print("Stopping ", i)
             self.stopTask(i)
 
     def disableTask(self, name):

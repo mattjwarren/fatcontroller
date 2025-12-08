@@ -1,6 +1,9 @@
 import FC_entity
 import base64
-import paramiko
+try:
+    import paramiko
+except ImportError:
+    paramiko = None
 
 """import base64
 import paramiko
@@ -91,7 +94,10 @@ class SSH(FC_entity.entity):
     def display(self,LineList,OutputCtrl):
         if LineList:
             for Line in LineList:
-                OutputCtrl.AppendText(Line.rstrip()+"\n")
+                try:
+                    OutputCtrl.insert("end", Line.rstrip()+"\n")
+                except:
+                    pass
     
     def getparameterdefs(self):
         '''Should return a dict of parm:parmtype pairs for the GUI

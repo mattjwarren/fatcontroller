@@ -1,7 +1,4 @@
-import FC_entity,os
-###########
-# START OF CLASS LOCAL
-#
+import FC_entity,subprocess,tkinter
 
 class LOCAL(FC_entity.entity):
     '''Implementation of an entity that executes commands on the local machine'''
@@ -13,14 +10,18 @@ class LOCAL(FC_entity.entity):
     # START OF INTERFACE ENTITY
     #
 
-
     Opts={}
 
     def execute(self,CmdList):
-        din,dout,derr=os.popen3(' '.join(CmdList))
-        output=dout.readlines()
-        errout=derr.readlines()
-        dummy=[output.append(err) for err in errout]  
+        # din,dout,derr=os.popen3(' '.join(CmdList))
+        try:
+            p = subprocess.Popen(' '.join(CmdList), shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            output = p.stdout.readlines()
+            errout = p.stderr.readlines()
+            # dummy=[output.append(err) for err in errout]  
+            output.extend(errout) # More pythonic
+        except Exception as e:
+            output = [f"Error executing command: {e}"]
         return output# List of lines readable by display() method
 
     def display(self,LineList,OutputCtrl):
@@ -29,7 +30,11 @@ class LOCAL(FC_entity.entity):
         This method should be implmented by the subclasser and translate
         the given LineList to human-readable output.'''
         for line in LineList:
-            OutputCtrl.AppendText(line.rstrip()+"\n")
+            # OutputCtrl.AppendText(line.rstrip()+"\n")
+            try:
+                OutputCtrl.insert("end", line.rstrip()+"\n")
+            except:
+                pass # Fallback or ignore if not a text widget
         return # print LineList, LineList is (minimally) output from execute() method
     
     def getparameterdefs(self):

@@ -11,7 +11,7 @@ class daemonmanager:
         self.activedaemons={}
         self.EntityManager=entitymanager
         self.Scheduler=scheduler
-	self.AlertManager=FC_AlertManager.AlertManager(self.EntityManager,processcommander)
+        self.AlertManager=FC_AlertManager.AlertManager(self.EntityManager,processcommander)
 
     def getactivedaemons(self):
         """ return a list of active daemon names"""
@@ -156,5 +156,5 @@ class daemonmanager:
         return self.AlertManager.getOutstandingAlerts()
 
     def handlealert(self,startindex,endindex):
-	self.AlertManager.remove(startindex,endindex)
+        self.AlertManager.remove(startindex,endindex)
 

@@ -1,4 +1,8 @@
-import FC_entity, telnetlib
+import FC_entity
+try:
+    import telnetlib
+except ImportError:
+    telnetlib = None
 ###########
 # START OF CLASS TELNET
 # implements entity()
@@ -189,7 +193,10 @@ class TELNET(FC_entity.entity):
     def display(self,LineList,OutputCtrl):
         if LineList:
             for Line in LineList:
-                OutputCtrl.AppendText(Line.rstrip()+"\n")
+                try:
+                    OutputCtrl.insert("end", Line.rstrip()+"\n")
+                except:
+                    pass
     
     def getparameterdefs(self):
         '''Should return a dict of parm:parmtype pairs for the GUI

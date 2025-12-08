@@ -34,7 +34,10 @@ class DUMB(FC_entity.entity):
         '''
 
         for line in LineList:
-            OutputCtrl.AppendText(line.rstrip()+"\n")
+            try:
+                OutputCtrl.insert("end", line.rstrip()+"\n")
+            except:
+                pass
         return # print LineList, LineList is (minimally) output from execute() method
     
     def getparameterdefs(self):
