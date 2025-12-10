@@ -212,6 +212,12 @@ class entitymanager:
         return DefineList
 
     def delete(self,EntityName):
+        if EntityName in self.OutPages:
+             try:
+                 self.OutBook.forget(self.OutPages[EntityName]['frame'])
+                 del self.OutPages[EntityName]
+             except Exception as e:
+                 self.display.infodisplay(f"Error closing tab for {EntityName}: {e}")
         del self.Entities[EntityName]
 
     def isEntity(self, EntityName: str) -> int:
