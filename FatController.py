@@ -14,36 +14,13 @@ import FC_command_parser
 import logging
 
 # Configure basic logging to prevent 'No handler found' warnings before GUI setup
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 fcversion="v1f11r1a"
 __version__ = fcversion
 
 startmessage='Welcome to FatController '+fcversion
 
-
-class TextHandler(logging.Handler):
-    """This class allows you to log to a Tkinter Text or ScrolledText widget"""
-    def __init__(self, text):
-        super().__init__()
-        self.text = text
-
-    def emit(self, record):
-        msg = self.format(record)
-        def append():
-            self.text.configure(state='normal')
-            self.text.insert(tk.END, msg + '\n')
-            self.text.configure(state='disabled')
-            self.text.see(tk.END)
-        # Check if we are in main thread, if not use after? 
-        # For simplicity in this Tkinter app, we assume logging happens where GUI is accessible 
-        # or we use a queue if it crashes. But Python 3 Tkinter is thread-tolerant enough for simple inserts usually, 
-        # or we should use .after. Let's use .after to be safe if called from threads.
-        try:
-             self.text.after(0, append)
-        except Exception:
-             # If widget is destroyed or not ready
-             self.handleError(record)
 
 
 class FatController(tk.Tk):
@@ -111,20 +88,7 @@ class FatController(tk.Tk):
         self.FirstPageTextCtrl.pack(fill=tk.BOTH, expand=True)
         self.FirstPageTextCtrl.insert(tk.END, startmessage + '\n')
 
-        # Create Logs Tab (Before configuring logging)
-        self.LogsPanel = ttk.Frame(self.OutBook)
-        self.OutBook.add(self.LogsPanel, text='LOGS')
-        
-        self.LogsTextCtrl = tk.Text(self.LogsPanel, wrap=tk.NONE, state='disabled')
-        # Add scrollbars
-        self.LogsScrollY = ttk.Scrollbar(self.LogsPanel, orient=tk.VERTICAL, command=self.LogsTextCtrl.yview)
-        self.LogsScrollX = ttk.Scrollbar(self.LogsPanel, orient=tk.HORIZONTAL, command=self.LogsTextCtrl.xview)
-        self.LogsTextCtrl.configure(yscrollcommand=self.LogsScrollY.set, xscrollcommand=self.LogsScrollX.set)
-        
-        self.LogsScrollY.pack(side=tk.RIGHT, fill=tk.Y)
-        self.LogsScrollX.pack(side=tk.BOTTOM, fill=tk.X)
-        self.LogsTextCtrl.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        
+        # Create Logs Tab - REMOVED per user request
         
         # Shell
         self.ShellTextCtrl = tk.Text(self.BLPanel, height=10)
@@ -142,10 +106,7 @@ class FatController(tk.Tk):
         
         # Setup Logging
 
-        
-        # 2. Text Handler for LOGS tab
-        self.text_handler = TextHandler(self.LogsTextCtrl)
-        self.text_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+        # 2. Text Handler for LOGS tab - REMOVED
         
         # 3. File Handler
         try:
@@ -162,8 +123,6 @@ class FatController(tk.Tk):
         root_logger.setLevel(logging.DEBUG) # Catch everything
         
         # Add handlers
-
-        root_logger.addHandler(self.text_handler)
         if self.file_handler:
             root_logger.addHandler(self.file_handler)
             

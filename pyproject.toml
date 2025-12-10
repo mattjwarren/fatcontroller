@@ -9,7 +9,8 @@ description = "FatController - A daemon management and automation tool"
 readme = "README.txt"
 requires-python = ">=3.7"
 dependencies = [
-    "paramiko>=2.0.0"
+    "paramiko>=2.0.0",
+    "fabric>=3.0.0"
 ]
 authors = [
   {name = "Matthew Warren", email = "matthew_j_warren@hotmail.com"}

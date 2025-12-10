@@ -1,24 +1,9 @@
 define entity LOCAL me
-define entity SSH gymir gymir warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH loptr loptr.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH gilling gilling warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH fenja fenja.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH bestla bestla.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity ENTITYGROUP gillslaves aegir fenja bestla greip loptr menja rindr
-define entity SSH brimir brimir.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH bolborn bolborn.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH hymir hymir.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity ENTITYGROUP devms hymir hroor brimir
-define entity SSH menja menja.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH hroor hroor.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity ENTITYGROUP buildservers gilling gymir bragi frigg
-define entity SSH aegir aegir.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH frigg frigg warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH fulla fulla.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity ENTITYGROUP jenks gilling gymir bragi bolborn fulla frigg
-define entity SSH bragi bragi warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH rindr rindr.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
-define entity SSH greip greip.ssd.hursley.ibm.com warrenma EggFishPants91 /home/warrenma/.ssh/id_rsa.pub
+define entity SSH pi1 192.168.1.101 matt matt None
+define entity SSH pi2 192.168.1.102 matt matt
+define entity SSH pi3 192.168.1.103 matt matt
+define entity ENTITYGROUP Rpis pi1 pi2 pi3
+define entity SSH server 192.168.1.199 matt EggFishPants99DG
 alias loadall load general
 alias saveall save all general
 substitute pendingdates select pending_date from volumes where status='PENDING' order by pending_date

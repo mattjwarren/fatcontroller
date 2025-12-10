@@ -1,10 +1,12 @@
 import FC_entity
 import logging
-import base64
 try:
-    import paramiko
+    from fabric import Connection, Config
+    from invoke.exceptions import UnexpectedExit
 except ImportError:
-    paramiko = None
+    Connection = None
+    Config = None
+    logging.error("Fabric not installed. SSH entity will not function.")
 
 ###########
 # START OF CLASS SSH
@@ -13,7 +15,7 @@ except ImportError:
 
 class SSH(FC_entity.entity):
 
-    Connections={} # {'name':paramiko.SSHClient()}
+    Opts={} 
     
     def __init__(self,Name,TCPAddress,SSHUser,SSHPass,SSHKeyfile):
         self.Name=Name
@@ -21,79 +23,147 @@ class SSH(FC_entity.entity):
         self.SSHUser=SSHUser
         self.SSHPass=SSHPass
         self.SSHKeyfile=SSHKeyfile
-        self.Connection=self.openconnection()
+        if self.SSHKeyfile == 'none':
+             self.SSHKeyfile = None
+             
+        # Lazy initialization - create connection only when needed to avoid stale objects
+        self.Connection = None
 
-    def openconnection(self):
-        if paramiko is None:
-            logging.error("Paramiko not installed. SSH entity cannot function.")
+    def _create_connection(self):
+        logging.debug(f"FC_SSH [{self.Name}]: Creating connection to {self.TCPAddress} as {self.SSHUser}")
+        if Connection is None:
+            logging.error("FC_SSH: Fabric Connection class is None.")
             return None
             
-        C=paramiko.SSHClient()
-        C.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        
-        pkey = None
-        if self.SSHKeyfile and self.SSHKeyfile.lower() != 'none':
-             try:
-                 # Try loading as RSA key first, can extend logic for others if needed
-                 # Or just rely on paramiko's ability to handle it via connect params if strictly keyfile path
-                 # But FatController seems to want to load it. 
-                 # Let's try to load it if file exists.
-                 pkey = paramiko.RSAKey.from_private_key_file(self.SSHKeyfile)
-             except Exception as e:
-                 logging.warning(f"Could not load key file {self.SSHKeyfile}: {e}")
+        connect_kwargs = {}
+
+        # Timeout for connection (10 seconds)
+        connect_kwargs['timeout'] = 10
+        # banner_timeout also helps with some slow servers
+        connect_kwargs['banner_timeout'] = 10
+        # Disable looking for keys in ~/.ssh etc
+        connect_kwargs['look_for_keys'] = False
+        # Disable agent usage to prevent hanging/errors on Windows if agent is flaky
+        connect_kwargs['allow_agent'] = False
+        # Disable GSSAPI to prevent delays/errors on Windows
+        connect_kwargs['gss_auth'] = False
+        connect_kwargs['gss_kex'] = False
         
         try:
-            # Prefer key if available, else password
-            C.connect(self.TCPAddress, username=self.SSHUser, password=self.SSHPass, pkey=pkey, look_for_keys=False)
-            logging.info(f"SSH Connected to {self.TCPAddress}")
-            return C
+            import paramiko
+            logging.debug(f"FC_SSH: Paramiko Version: {paramiko.__version__}")
+        except:
+            pass
+
+        # Handle Password
+        if self.SSHPass and self.SSHPass.lower() != 'none':
+            logging.debug(f"FC_SSH [{self.Name}]: Password provided (length {len(self.SSHPass)})")
+            connect_kwargs['password'] = self.SSHPass
+        else:
+            logging.debug(f"FC_SSH [{self.Name}]: No password provided.")
+            
+        # Handle Keyfile
+        if self.SSHKeyfile and self.SSHKeyfile.lower() != 'none':
+             logging.debug(f"FC_SSH [{self.Name}]: Using keyfile {self.SSHKeyfile}")
+             connect_kwargs['key_filename'] = self.SSHKeyfile
+        else:
+             logging.debug(f"FC_SSH [{self.Name}]: No keyfile provided.")
+             
+        # Configure to accept new keys automatically (mimic paramiko AutoAddPolicy)
+        # We use the 'ssh_config' overrides for this.
+        # NOTE: UserKnownHostsFile should likely be None or platform specific NUL.
+        # Setting StrictHostKeyChecking=no is the primary fix for "Host key not found" issues.
+        # NumberOfPasswordPrompts=0 prevents hanging on auth failure.
+        config = Config(overrides={
+            'run': {'warn': True}, 
+            'ssh_config': {
+                'StrictHostKeyChecking': 'no',
+                'NumberOfPasswordPrompts': '0'
+            }
+        })
+        
+        try:
+            conn = Connection(
+                host=self.TCPAddress,
+                user=self.SSHUser,
+                config=config,
+                connect_kwargs=connect_kwargs
+            )
+            logging.debug(f"FC_SSH [{self.Name}]: Connection object created: {conn}")
+            return conn
         except Exception as e:
-            logging.error(f"SSH Connection failed to {self.TCPAddress}: {e}")
+            logging.error(f"FC_SSH [{self.Name}]: Error creating Connection object: {e}")
             return None
 
     def execute(self, CmdList):
+        logging.debug(f"FC_SSH [{self.Name}]: execute called with {CmdList}")
         Output = []
-        if not self.Connection:
-            self.Connection = self.openconnection()
-            if not self.Connection:
-                return ["Error: No SSH Connection"]
+        if self.Connection is None:
+            logging.warning(f"FC_SSH [{self.Name}]: Connection was None, attempting to create.")
+            # Try to recreate if missing (e.g. import failed previously but maybe fixed? unlikely)
+            self.Connection = self._create_connection()
+            if self.Connection is None:
+                return ["Error: Fabric library not found or initialization failed"]
 
         cmd_str = ' '.join(CmdList)
+        logging.debug(f"FC_SSH [{self.Name}]: Preparing to run '{cmd_str}'")
         
-        try:
-            stdin, stdout, stderr = self.Connection.exec_command(cmd_str)
-            # Paramiko exec_command is non-blocking on the channel execution but returning streams
-            # We need to read from stdout/stderr
-            
-            # Simple blocking read for now. For long running commands, this might block the GUI
-            # but that's a known limitation of the current architecture (FatController seems synchronous in execute)
-            
-            out_bytes = stdout.read()
-            err_bytes = stderr.read()
-            
-            if out_bytes:
-                Output.extend(out_bytes.decode('utf-8', errors='replace').splitlines())
-            if err_bytes:
-                Output.append("STDERR:")
-                Output.extend(err_bytes.decode('utf-8', errors='replace').splitlines())
+        # Retry loop (Try once, then retry once if failed)
+        retries = 1
+        attempt = 0
+        
+        while attempt <= retries:
+            attempt += 1
+            logging.debug(f"FC_SSH [{self.Name}]: Attempt {attempt} of {retries+1}")
+            try:
+                # Ensure connection is open (authentication happens here)
+                if not self.Connection.is_connected:
+                    logging.debug(f"FC_SSH [{self.Name}]: Not connected. Calling open()...")
+                    self.Connection.open()
+                    logging.debug(f"FC_SSH [{self.Name}]: open() returned. Connected: {self.Connection.is_connected}")
+                else:
+                    logging.debug(f"FC_SSH [{self.Name}]: Already connected.")
+                    
+                # usage of warn=True to not raise UnexpectedExit on non-zero return codes,
+                # so we can capture stderr/stdout manually.
+                logging.debug(f"FC_SSH [{self.Name}]: Calling self.Connection.run()...")
+                result = self.Connection.run(cmd_str, hide=True, warn=True)
+                logging.debug(f"FC_SSH [{self.Name}]: Run returned. Exited: {result.exited}")
                 
-        except paramiko.SSHException as e:
-            logging.warning(f"SSH Exception: {e}. Attempting reconnect...")
-            self.Connection = self.openconnection()
-            if self.Connection:
-                 # Retry once
-                 try:
-                    stdin, stdout, stderr = self.Connection.exec_command(cmd_str)
-                    out_bytes = stdout.read()
-                    if out_bytes:
-                        Output.extend(out_bytes.decode('utf-8', errors='replace').splitlines())
-                 except Exception as e2:
-                     Output.append(f"Error executing command after reconnect: {e2}")
-            else:
-                Output.append("Error: Connection lost and could not reconnect.")
-        except Exception as e:
-             Output.append(f"Error executing command: {e}")
+                if result.stdout:
+                    logging.debug(f"FC_SSH [{self.Name}]: Got stdout ({len(result.stdout)} chars)")
+                    Output.extend(result.stdout.splitlines())
+                
+                if result.stderr:
+                    logging.debug(f"FC_SSH [{self.Name}]: Got stderr ({len(result.stderr)} chars)")
+                    if Output: 
+                        Output.append("--- STDERR ---")
+                    Output.extend(result.stderr.splitlines())
+                
+                # Success, break loop
+                break
+                
+            except Exception as e:
+                import traceback
+                tb = traceback.format_exc()
+                logging.warning(f"FC_SSH [{self.Name}]: Exception during execution attempt {attempt}: {e}\n{tb}")
+                
+                if attempt <= retries:
+                    logging.warning(f"SSH Execution failed for {self.Name}: {e}. Retrying...")
+                    # Force close and retry
+                    try: 
+                        logging.debug(f"FC_SSH [{self.Name}]: Closing connection...")
+                        self.Connection.close()
+                    except: 
+                        pass
+                    # Recreate connection object to be safe against state corruption
+                    logging.debug(f"FC_SSH [{self.Name}]: Recreating connection object...")
+                    self.Connection = self._create_connection()
+                else:
+                    logging.error(f"SSH Execution failed for {self.Name}: {e}")
+                    Output.append(f"Error executing command: {e}")
 
+        logging.debug(f"FC_SSH [{self.Name}]: Returning output ({len(Output)} lines)")
         return Output
     
     def display(self,LineList,OutputCtrl):
@@ -113,7 +183,7 @@ class SSH(FC_entity.entity):
         return self.Name
 
     def getparameterstring(self):
-        return f"{self.Name} {self.TCPAddress} {self.SSHUser} {self.SSHPass} {self.SSHKeyfile}"
+        return f"{self.TCPAddress} {self.SSHUser} {self.SSHPass} {self.SSHKeyfile}"
 
     def getparameterlist(self):
         '''returns a list of the value given as string by getparameterstring'''

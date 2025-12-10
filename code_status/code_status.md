@@ -26,5 +26,17 @@ The codebase is stable. Major bug fixes for the 'save all' functionality have be
 -   `winsetup.bat`: Removed legacy setup script.
 
 ## Technical Notes
--   **SSH Testing**: The `FC_SSH` module's dependency on `paramiko` is now safely mocked in tests.
--   **ENTITYGROUP**: UI support relies on special handling in the presentation layer to convert between space-separated strings (UI) and lists (EntityManager).
+-   **SSH Testing**: The `FC_SSH` module now uses `fabric` and is tested with `unittest.mock`.
+-   **Dependencies**: Added `fabric` to project dependencies.
+-   **Bug Fix**: `FC_SSH.py` now includes:
+    -   `StrictHostKeyChecking='no'` to prevent passing on new hosts.
+    -   Removed `UserKnownHostsFile` override (was `/dev/null`) to fix Windows compatibility.
+    -   `NumberOfPasswordPrompts='0'` to prevent UI hangs on authentication failure.
+    -   Explicit `open()` call to catch authentication errors before command execution.
+    -   Connection timeouts (10s).
+    -   Retry logic to handle "No existing session" or transient connection drops.
+    -   Fixed `getparameterstring` to prevent duplicate entity name in `save` files.
+    -   Added detailed debug logging for diagnostics.
+    -   Implemented lazy connection initialization (connect on demand) to avoid stale objects.
+    -   Disabled GSSAPI and SSH Agent (`allow_agent=False`, `gss_auth=False`) for Windows stability.
+    -   Removed GUI "LOGS" tab and `TextHandler` to prevent threading crashes; logs now go only to `logs.txt`.
