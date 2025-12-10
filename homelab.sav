@@ -1,0 +1,72 @@
+define entity LOCAL me
+define entity ENTITYGROUP gillslaves aegir fenja bestla greip loptr menja rindr
+define entity ENTITYGROUP devms hymir hroor brimir
+define entity ENTITYGROUP buildservers gilling gymir bragi frigg
+define entity ENTITYGROUP jenks gilling gymir bragi bolborn fulla frigg
+alias loadall load general
+alias saveall save all general
+substitute pendingdates select pending_date from volumes where status='PENDING' order by pending_date
+substitute xn x nsk
+substitute claimable "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+substitute xm x mustoUnix
+substitute scratch "select mediatype,count(*) from libvolumes where status='Scratch' group by mediatype"
+substitute al addline
+substitute xc x core
+substitute xr x rcl
+substitute retentions select domain_name,set_name,class_name,verexists,verdeleted,retextra,retonly from bu_copygroups
+addline claimable x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=~2) group by mediatype"
+addline scratch set TSM DATAONLY yes
+addline scratch msg -
+addline scratch msg - SCRATCH REPORT FOR ~1 -
+addline scratch msg -
+addline scratch x ~1 select mediatype,count\(\*\) from libvolumes where status=\'Scratch\' group by mediatype
+addline scratch msg -
+addline scratch msg - PENDING COUNTS FOR ~1 -
+addline scratch msg -
+addline scratch x ~1 run pendcountaddline scratch msg -
+addline scratch msg - CLAIMABLE AT 50% FOR ~1 -
+addline scratch msg -
+addline scratch x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+addline scratch set TSM DATAONLY no
+addline reado_to_readw x ~ALERT_ENTITY upd vol * whereacc=reado acc=readw
+addline updnod x ~1 update node ~2 ~2
+addline test_pass msg TEST_PASS fired
+addline test_pass msg ~ALERT_ENTITY fired TEST_PASS
+addline overview x ~1 q se
+addline overview x ~1 q mo
+addline overview x ~1 q dr
+addline overview x ~1 ru qdr
+addline overview x ~1 q pr
+addline overview x ~1 q db
+addline overview x ~1 q log
+addline volutil x ~1 select volume_name, pct_utilized from volumes where stgpool_name='~2'
+addline showvrs set TSM DATAONLY yes
+addline showvrs x ~1 q drm * wherestate=vaultretrieve
+addline showvrs set TSM DATAONLY no
+addline test_fail msg TEST_FAIL fired
+addline test_fail msg ~ALERT_ENTITY fired TEST_FAIL
+set FATCONTROLLER userhome /home/warrenma
+set FATCONTROLLER VERBOSE yes
+set FATCONTROLLER DEVELOPERPATH c:\\
+set FATCONTROLLER DEVELOPER no
+define daemon Every10
+define daemon Every15
+define daemon TwiceDaily
+define schedule Every10 1164986415.7 1264986414.7 600
+define schedule Every15 1165229023.69 1265229022.69 900
+define schedule TwiceDaily 1164983878.75 1264983877.75 43200
+define task Every10 ReadoFromWriteError "select 'tag',count(*) from actlog where msgno=1411 and current_timestamp-date_time<10 minutes"
+define task Every10 ScratchGonePrivate "select 'tag', count(*) from actlog where msgno=8778 and current_timestamp-date_time<10 minutes"
+define task Every15 core_diskpool q stg
+define task Every15 diskpool_usage q stg
+define task TwiceDaily TSM_db "select 'tag',pct_utilized from db"
+define collector Every10 ReadoFromWriteError Count ^tag 0 ReadoFromWriteError,^2 data/FC_
+define collector Every10 ScratchGonePrivate Count ^tag 0 ScratchGonePrivate,^2 data/FC_
+define collector Every15 core_diskpool Check ^DISKPOOL 0 diskpool%,^4 data/FC_
+define collector Every15 diskpool_usage Check ^BACKUPPOOL 0 backuppool%,^5 data/FC_
+define collector TwiceDaily TSM_db DB%Used ^tag 0 DB%Util,^2 data/FC_
+define alert Every10 ReadoFromWriteError Count 0.0 0.0 "WARNING: Tapes have been made Reado due to write error" NoScript reado_to_readw NoScript reado_to_readw
+define alert Every10 ScratchGonePrivate Count 0.0 0.0 "WARNING: Scratch tapes have switched to Private status" NoScript NoScript
+define alert Every15 core_diskpool Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+define alert Every15 diskpool_usage Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+define alert TwiceDaily TSM_db DB%Used 0.0 80.0 "WARNING: DB Utilisation above 80%" NoScript NoScript

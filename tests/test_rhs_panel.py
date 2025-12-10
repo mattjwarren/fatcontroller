@@ -123,3 +123,4 @@ class TestRHSPanel:
             
         assert 'MyAlias' not in app.aliases
 
+

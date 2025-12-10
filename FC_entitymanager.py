@@ -294,7 +294,7 @@ class entitymanager:
             'SSH': ['Host', 'User', 'Password', 'KeyFile'],
             'DUMB': [],
             'LOCAL': [],
-            # 'ENTITYGROUP': [] # Special handling needed
+            'ENTITYGROUP': ['Members']
         }
 
 #

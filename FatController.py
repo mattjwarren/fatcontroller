@@ -355,12 +355,15 @@ class FatController(tk.Tk):
                 if not is_new:
                     try:
                         raw_params = self.EntityManager.getEntity(name).getparameterstring()
-                        parts = raw_params.split() 
-                        # Check logic
-                        if len(parts) > len(fields):
-                            current_values = parts[1:]
+                        if entity_type == 'ENTITYGROUP':
+                            current_values = [raw_params]
                         else:
-                            current_values = parts
+                            parts = raw_params.split() 
+                            # Check logic
+                            if len(parts) > len(fields):
+                                current_values = parts[1:]
+                            else:
+                                current_values = parts
                     except:
                         pass
                 
@@ -450,7 +453,10 @@ class FatController(tk.Tk):
             params.append(name) # First param is always name for define logic
             for field in fields:
                 val = parent.input_vars[field].get()
-                params.append(val)
+                if entity_type == 'ENTITYGROUP' and field == 'Members':
+                     params.extend(val.split())
+                else:
+                     params.append(val)
                 
             # Call define - this overwrites existing in EntityManager
             self.EntityManager.define(entity_type, params)
@@ -547,7 +553,11 @@ class FatController(tk.Tk):
                 fields = metadata.get(entity_type, [])
                 params = [name]
                 for field in fields:
-                    params.append(parent.input_vars[field].get())
+                    val = parent.input_vars[field].get()
+                    if entity_type == 'ENTITYGROUP' and field == 'Members':
+                        params.extend(val.split())
+                    else:
+                        params.append(val)
                 self.EntityManager.define(entity_type, params)
                 
             elif obj_type == 'Daemons':
