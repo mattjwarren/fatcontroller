@@ -1,5 +1,7 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import messagebox
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 import os,sys,re,shutil,time,threading,pprint
 
 # Make sure we can find local modules
@@ -23,11 +25,11 @@ startmessage='Welcome to FatController '+fcversion
 
 
 
-class FatController(tk.Tk):
+class FatController(ttk.Window):
     '''is essentially the command processor'''
     
     def __init__(self):
-        super().__init__()
+        super().__init__(themename="darkly")
         
         self.title("FatController")
         self.geometry("1024x768")
@@ -57,24 +59,24 @@ class FatController(tk.Tk):
         #############
         
         # Main Vertical Splitter
-        self.VSplitter = tk.PanedWindow(self, orient=tk.HORIZONTAL, sashrelief=tk.RAISED)
+        self.VSplitter = ttk.Panedwindow(self, orient=tk.HORIZONTAL)
         self.VSplitter.pack(fill=tk.BOTH, expand=True)
         
         # Left Side (Notebook + Shell)
-        self.LSplitter = tk.PanedWindow(self.VSplitter, orient=tk.VERTICAL, sashrelief=tk.RAISED)
-        self.VSplitter.add(self.LSplitter, width=700)
+        self.LSplitter = ttk.Panedwindow(self.VSplitter, orient=tk.VERTICAL)
+        self.VSplitter.add(self.LSplitter, weight=3) # Main area
         
         # Right Side (Tree)
-        self.RSplitter = tk.Frame(self.VSplitter)
+        self.RSplitter = ttk.Frame(self.VSplitter)
         self.VSplitter.add(self.RSplitter)
         
         # TLPanel (Notebook)
-        self.TLPanel = tk.Frame(self.LSplitter)
-        self.LSplitter.add(self.TLPanel, height=500)
+        self.TLPanel = ttk.Frame(self.LSplitter)
+        self.LSplitter.add(self.TLPanel, weight=3)
         
         # BLPanel (Shell)
-        self.BLPanel = tk.Frame(self.LSplitter)
-        self.LSplitter.add(self.BLPanel, height=200) # approximate
+        self.BLPanel = ttk.Frame(self.LSplitter)
+        self.LSplitter.add(self.BLPanel, weight=1)
         
         # Notebook
         self.OutBook = ttk.Notebook(self.TLPanel)
@@ -95,7 +97,7 @@ class FatController(tk.Tk):
         self.ShellTextCtrl.configure(state='disabled')
         self.ShellTextCtrl.pack(fill=tk.BOTH, expand=True)
         # Entry for command
-        self.ShellEntry = tk.Entry(self.BLPanel)
+        self.ShellEntry = ttk.Entry(self.BLPanel)
         self.ShellEntry.pack(fill=tk.X)
         self.ShellEntry.bind('<Return>', self.ShellWindowEnterEvent)
         self.ShellEntry.bind('<KP_Enter>', self.ShellWindowEnterEvent)
@@ -152,11 +154,11 @@ class FatController(tk.Tk):
         # Right Side Panel Layout
         
         # 1. Top Panel for Dropdown and Buttons
-        self.RHS_TopPanel = tk.Frame(self.RSplitter)
+        self.RHS_TopPanel = ttk.Frame(self.RSplitter)
         self.RHS_TopPanel.pack(fill=tk.X, padx=5, pady=5)
         
         # Object Type Dropdown
-        tk.Label(self.RHS_TopPanel, text="Object Type:").pack(side=tk.LEFT)
+        ttk.Label(self.RHS_TopPanel, text="Object Type:").pack(side=tk.LEFT)
         self.ObjectTypeVar = tk.StringVar()
         self.ObjectTypeCombo = ttk.Combobox(self.RHS_TopPanel, textvariable=self.ObjectTypeVar, state="readonly")
         self.ObjectTypeCombo['values'] = ('Entities', 'Daemons', 'Scripts', 'Aliases', 'Substitutions')
@@ -165,13 +167,13 @@ class FatController(tk.Tk):
         self.ObjectTypeCombo.bind("<<ComboboxSelected>>", self.on_type_selected)
         
         # Add/Remove Buttons
-        self.AddButton = tk.Button(self.RHS_TopPanel, text="+", width=3, command=self.add_object_dialog)
+        self.AddButton = ttk.Button(self.RHS_TopPanel, text="+", width=3, command=self.add_object_dialog)
         self.AddButton.pack(side=tk.LEFT, padx=2)
-        self.RemoveButton = tk.Button(self.RHS_TopPanel, text="-", width=3, command=self.remove_selected_objects)
+        self.RemoveButton = ttk.Button(self.RHS_TopPanel, text="-", width=3, command=self.remove_selected_objects)
         self.RemoveButton.pack(side=tk.LEFT, padx=2)
         
         # 2. Middle Panel for Listbox
-        self.RHS_ListPanel = tk.Frame(self.RSplitter)
+        self.RHS_ListPanel = ttk.Frame(self.RSplitter)
         self.RHS_ListPanel.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
         self.ObjectListbox = tk.Listbox(self.RHS_ListPanel, selectmode=tk.EXTENDED)
@@ -183,7 +185,7 @@ class FatController(tk.Tk):
         self.ObjectListbox.configure(yscrollcommand=self.ObjectListScroll.set)
         
         # 3. Bottom Panel for Config Tabs
-        self.RHS_ConfigPanel = tk.Frame(self.RSplitter)
+        self.RHS_ConfigPanel = ttk.Frame(self.RSplitter)
         self.RHS_ConfigPanel.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
         
         self.ConfigSelectNotebook = ttk.Notebook(self.RHS_ConfigPanel)
@@ -213,7 +215,7 @@ class FatController(tk.Tk):
             del self.EntityTypeLabel
             
         if obj_type == 'Entities':
-            self.EntityTypeLabel = tk.Label(self.RHS_TopPanel, text="Type:")
+            self.EntityTypeLabel = ttk.Label(self.RHS_TopPanel, text="Type:")
             self.EntityTypeLabel.pack(side=tk.LEFT, padx=(5,0))
             
             self.EntityTypeVar = tk.StringVar()
@@ -299,9 +301,9 @@ class FatController(tk.Tk):
                 tk.Label(parent, text=f"Entity Type: {entity_type}").pack(anchor='w', pady=5)
                 
                 if is_new:
-                    tk.Label(parent, text="Name:").pack(anchor='w')
+                    ttk.Label(parent, text="Name:").pack(anchor='w')
                     name_var = tk.StringVar()
-                    tk.Entry(parent, textvariable=name_var).pack(fill='x')
+                    ttk.Entry(parent, textvariable=name_var).pack(fill='x')
                     parent.input_vars['Name'] = name_var
                 else:
                     parent.input_vars['Name'] = tk.StringVar(value=name) # Hidden
@@ -327,12 +329,12 @@ class FatController(tk.Tk):
                         pass
                 
                 for i, field in enumerate(fields):
-                    tk.Label(parent, text=f"{field}:").pack(anchor='w')
+                    ttk.Label(parent, text=f"{field}:").pack(anchor='w')
                     var = tk.StringVar()
                     if not is_new and i < len(current_values):
                          var.set(current_values[i])
                     
-                    entry = tk.Entry(parent)
+                    entry = ttk.Entry(parent)
                     entry.configure(textvariable=var)
                     if 'pass' in field.lower() or 'password' in field.lower():
                         entry.configure(show='*')
@@ -342,60 +344,60 @@ class FatController(tk.Tk):
 
             elif obj_type == 'Daemons':
                 if is_new:
-                     tk.Label(parent, text="Name:").pack(anchor='w')
+                     ttk.Label(parent, text="Name:").pack(anchor='w')
                      name_var = tk.StringVar()
-                     tk.Entry(parent, textvariable=name_var).pack(fill='x')
+                     ttk.Entry(parent, textvariable=name_var).pack(fill='x')
                      parent.input_vars['Name'] = name_var
                 else:
                      daemon = self.DaemonManager.getDaemon(name)
                      sched = daemon.getschedule()
                      
-                     tk.Label(parent, text="Schedule Configuration").pack(anchor='w', pady=(5,0))
-                     tk.Label(parent, text="Start:").pack(anchor='w')
+                     ttk.Label(parent, text="Schedule Configuration").pack(anchor='w', pady=(5,0))
+                     ttk.Label(parent, text="Start:").pack(anchor='w')
                      start_var = tk.StringVar(value=str(sched.getstart()))
-                     tk.Entry(parent, textvariable=start_var).pack(fill='x')
+                     ttk.Entry(parent, textvariable=start_var).pack(fill='x')
                      parent.input_vars['Start'] = start_var
                      
-                     tk.Label(parent, text="Period:").pack(anchor='w')
+                     ttk.Label(parent, text="Period:").pack(anchor='w')
                      period_var = tk.StringVar(value=str(sched.getperiod()))
-                     tk.Entry(parent, textvariable=period_var).pack(fill='x')
+                     ttk.Entry(parent, textvariable=period_var).pack(fill='x')
                      parent.input_vars['Period'] = period_var
 
             elif obj_type == 'Scripts':
                  if is_new:
-                     tk.Label(parent, text="Name:").pack(anchor='w')
+                     ttk.Label(parent, text="Name:").pack(anchor='w')
                      name_var = tk.StringVar()
-                     tk.Entry(parent, textvariable=name_var).pack(fill='x')
+                     ttk.Entry(parent, textvariable=name_var).pack(fill='x')
                      parent.input_vars['Name'] = name_var
                  
                  # Logic for text area loading omitted for brevity as it's not the focus
             
             elif obj_type == 'Aliases':
                  if is_new:
-                     tk.Label(parent, text="Name:").pack(anchor='w')
+                     ttk.Label(parent, text="Name:").pack(anchor='w')
                      name_var = tk.StringVar()
-                     tk.Entry(parent, textvariable=name_var).pack(fill='x')
+                     ttk.Entry(parent, textvariable=name_var).pack(fill='x')
                      parent.input_vars['Name'] = name_var
 
-                 tk.Label(parent, text="Alias Content:").pack(anchor='w')
+                 ttk.Label(parent, text="Alias Content:").pack(anchor='w')
                  alias_var = tk.StringVar()
                  if not is_new and name in self.aliases:
                      alias_var.set(' '.join(self.aliases[name]))
-                 tk.Entry(parent, textvariable=alias_var).pack(fill='x')
+                 ttk.Entry(parent, textvariable=alias_var).pack(fill='x')
                  parent.input_vars['Content'] = alias_var
 
             elif obj_type == 'Substitutions':
                  if is_new:
-                     tk.Label(parent, text="Name:").pack(anchor='w')
+                     ttk.Label(parent, text="Name:").pack(anchor='w')
                      name_var = tk.StringVar()
-                     tk.Entry(parent, textvariable=name_var).pack(fill='x')
+                     ttk.Entry(parent, textvariable=name_var).pack(fill='x')
                      parent.input_vars['Name'] = name_var
 
-                 tk.Label(parent, text="Substitution Content:").pack(anchor='w')
+                 ttk.Label(parent, text="Substitution Content:").pack(anchor='w')
                  sub_var = tk.StringVar()
                  if not is_new and name in self.substitutions:
                      sub_var.set(' '.join(self.substitutions[name]))
-                 tk.Entry(parent, textvariable=sub_var).pack(fill='x')
+                 ttk.Entry(parent, textvariable=sub_var).pack(fill='x')
                  parent.input_vars['Content'] = sub_var
                      
         except Exception as e:

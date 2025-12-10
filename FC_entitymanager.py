@@ -2,7 +2,8 @@
 import FC_LOCAL,FC_TSM,FC_TELNET,FC_DUMB,FC_ENTITYGROUP, FC_SSH
 import FC_formatter
 import tkinter as tk
-from tkinter import ttk
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
 ###########
 # START OF CLASS entitymanager
