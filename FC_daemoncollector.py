@@ -103,7 +103,7 @@ class daemoncollector:
         self.alert.setfail_script(fail_script)
 
     def tostring(self):
-        return str(self.texttag)+' '+str(self.skipforward)+' '+str(self.outformat)+' '+str(self.outfile)
+        return str(self.texttag)+' '+str(self.skipforward)+' '+str(self.outformat)+' '+str(self.data_filename)
 #
 # END OF CLASS daemoncollector
 ###########

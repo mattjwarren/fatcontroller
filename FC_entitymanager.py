@@ -2,7 +2,8 @@
 import FC_LOCAL,FC_TSM,FC_TELNET,FC_DUMB,FC_ENTITYGROUP, FC_SSH
 import FC_formatter
 import tkinter as tk
-from tkinter import ttk
+import ttkbootstrap as ttk
+from ttkbootstrap.constants import *
 
 ###########
 # START OF CLASS entitymanager
@@ -212,6 +213,12 @@ class entitymanager:
         return DefineList
 
     def delete(self,EntityName):
+        if EntityName in self.OutPages:
+             try:
+                 self.OutBook.forget(self.OutPages[EntityName]['frame'])
+                 del self.OutPages[EntityName]
+             except Exception as e:
+                 self.display.infodisplay(f"Error closing tab for {EntityName}: {e}")
         del self.Entities[EntityName]
 
     def isEntity(self, EntityName: str) -> int:
@@ -280,6 +287,18 @@ class entitymanager:
         return OptList # list of lists
 
 
+    def get_entity_types_metadata(self):
+        """Returns a dict of entity types and their required parameters (excluding name)."""
+        return {
+            'TSM': ['Address', 'Port', 'AdminUser', 'AdminPass', 'Node'],
+            'TELNET': ['IPAddress', 'UserName', 'Password', 'Prompt'],
+            'SSH': ['Host', 'User', 'Password', 'KeyFile'],
+            'DUMB': [],
+            'LOCAL': [],
+            'ENTITYGROUP': ['Members']
+        }
+
 #
 # END OF CLASS entitymanager
+#
 ###########

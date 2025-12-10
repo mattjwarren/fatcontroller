@@ -135,7 +135,7 @@ class daemonmanager:
         for daemon in self.daemons:
             tasks=self.daemons[daemon].gettasks()
             for task in tasks:
-                entities=tasks[task].tentities
+                entities=tasks[task].entities
                 for entity in entities:
                     definelist.append('subscribe entity '+daemon+' '+task+' '+entity)
         return definelist

@@ -1,9 +1,8 @@
 define entity LOCAL me
-define entity SSH pi1 192.168.1.101 matt matt None
-define entity SSH pi2 192.168.1.102 matt matt
-define entity SSH pi3 192.168.1.103 matt matt
-define entity ENTITYGROUP Rpis pi1 pi2 pi3
-define entity SSH server 192.168.1.199 matt EggFishPants99DG
+define entity ENTITYGROUP gillslaves aegir fenja bestla greip loptr menja rindr
+define entity ENTITYGROUP devms hymir hroor brimir
+define entity ENTITYGROUP buildservers gilling gymir bragi frigg
+define entity ENTITYGROUP jenks gilling gymir bragi bolborn fulla frigg
 alias loadall load general
 alias saveall save all general
 substitute pendingdates select pending_date from volumes where status='PENDING' order by pending_date

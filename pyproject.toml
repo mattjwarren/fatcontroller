@@ -9,7 +9,9 @@ description = "FatController - A daemon management and automation tool"
 readme = "README.txt"
 requires-python = ">=3.7"
 dependencies = [
-    "paramiko>=2.0.0"
+    "paramiko>=2.0.0",
+    "fabric>=3.0.0",
+    "ttkbootstrap>=1.10.0"
 ]
 authors = [
   {name = "Matthew Warren", email = "matthew_j_warren@hotmail.com"}
@@ -50,3 +52,7 @@ py-modules = [
     "FC_TSM",
     "config"
 ]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]

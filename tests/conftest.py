@@ -13,10 +13,13 @@ def mock_tkinter(monkeypatch):
     We use a custom class for Tk instead of MagicMock to avoid 
     issues with subclassing MagicMock (which expects __init__ to accept kwargs).
     """
+    import types
+    
+    # Create clean mock modules
+    mock_tk_module = types.ModuleType('tkinter')
+    
     class MockTk:
-        def __init__(self, *args, **kwargs):
-            pass
-        
+        def __init__(self, *args, **kwargs): pass
         def geometry(self, *args): pass
         def title(self, *args): pass
         def mainloop(self): pass
@@ -25,47 +28,81 @@ def mock_tkinter(monkeypatch):
         def protocol(self, *args, **kwargs): pass
         def destroy(self): pass
         def after(self, *args, **kwargs): pass
-        
-        # Add attributes accessed by FatController
-        
-    mock_tk_module = MagicMock()
+        def winfo_children(self): return []
+        def nametowidget(self, name): return MagicMock()
+        def select(self, *args): pass
+        def forget(self, *args): pass
+        def tab(self, *args, **kwargs): return ""
+        def index(self, *args): return 0
+    
     mock_tk_module.Tk = MockTk
     
-    # Define a factory that swallows arguments and returns a MagicMock
     def MockWidgetFactory(*args, **kwargs):
-        return MagicMock()
+        m = MagicMock()
+        m.get.return_value = ""
+        m.tabs.return_value = []
+        return m
 
-    # Mock other widgets using the factory
-    mock_tk_module.PanedWindow = MockWidgetFactory
-    mock_tk_module.Frame = MockWidgetFactory
-    mock_tk_module.Text = MockWidgetFactory
-    mock_tk_module.Scrollbar = MockWidgetFactory
-    mock_tk_module.Entry = MockWidgetFactory
+    # Standard widgets
+    for w in ['PanedWindow', 'Frame', 'Text', 'Scrollbar', 'Entry', 'Label', 'Button', 'Listbox', 'PanedWindow']:
+        setattr(mock_tk_module, w, MockWidgetFactory)
+
+    class MockStringVar:
+        def __init__(self, value='', *args, **kwargs): self._value = value
+        def get(self): return self._value
+        def set(self, value): self._value = value
+    
+    mock_tk_module.StringVar = MockStringVar
+    mock_tk_module.messagebox = MagicMock()
     
     # Constants
-    mock_tk_module.END = 'end'
-    mock_tk_module.BOTH = 'both'
-    mock_tk_module.X = 'x'
-    mock_tk_module.Y = 'y'
-    mock_tk_module.LEFT = 'left'
-    mock_tk_module.RIGHT = 'right'
-    mock_tk_module.BOTTOM = 'bottom'
-    mock_tk_module.HORIZONTAL = 'horizontal'
-    mock_tk_module.VERTICAL = 'vertical'
-    mock_tk_module.WORD = 'word'
-    mock_tk_module.NONE = 'none'
-    mock_tk_module.RAISED = 'raised'
-    
+    constants = {
+        'END': 'end', 'BOTH': 'both', 'X': 'x', 'Y': 'y', 'LEFT': 'left', 'RIGHT': 'right', 
+        'BOTTOM': 'bottom', 'HORIZONTAL': 'horizontal', 'VERTICAL': 'vertical', 
+        'WORD': 'word', 'NONE': 'none', 'RAISED': 'raised', 'EXTENDED': 'extended',
+        'ACTIVE': 'active', 'NORMAL': 'normal', 'DISABLED': 'disabled'
+    }
+    for k, v in constants.items():
+        setattr(mock_tk_module, k, v)
+        
     monkeypatch.setitem(sys.modules, 'tkinter', mock_tk_module)
+    monkeypatch.setitem(sys.modules, 'tkinter.messagebox', mock_tk_module.messagebox)
     
-    mock_ttk = MagicMock()
-    mock_ttk.Notebook = MockWidgetFactory
-    mock_ttk.Frame = MockWidgetFactory
-    mock_ttk.Scrollbar = MockWidgetFactory
-    mock_ttk.Treeview = MockWidgetFactory
-    
+    # Mock tkinter.ttk
+    mock_ttk = types.ModuleType('tkinter.ttk')
+    for w in ['Notebook', 'Frame', 'Scrollbar', 'Treeview', 'Combobox', 'PanedWindow', 'Label', 'Entry', 'Button']:
+        setattr(mock_ttk, w, MockWidgetFactory)
+        
     monkeypatch.setitem(sys.modules, 'tkinter.ttk', mock_ttk)
     monkeypatch.setitem(sys.modules, 'ttk', mock_ttk)
+    
+    # Mock ttkbootstrap
+    mock_ttkbootstrap = types.ModuleType('ttkbootstrap')
+    mock_ttkbootstrap.Window = MockTk
+    for w in ['Frame', 'Label', 'Entry', 'Button', 'PanedWindow', 'Notebook', 'Combobox', 'Scrollbar']:
+        setattr(mock_ttkbootstrap, w, MockWidgetFactory)
+    
+    # Mock ttkbootstrap.constants
+    mock_bst_constants = types.ModuleType('ttkbootstrap.constants')
+    for k, v in constants.items():
+        setattr(mock_bst_constants, k, v)
+    # Also inject constants directly into ttkbootstrap if necessary, but typical usage is from .constants
+    
+    mock_ttkbootstrap.constants = mock_bst_constants
+    
+    monkeypatch.setitem(sys.modules, 'ttkbootstrap', mock_ttkbootstrap)
+    monkeypatch.setitem(sys.modules, 'ttkbootstrap.constants', mock_bst_constants)
+    
+    # Mock FC_SSH
+    mock_ssh = MagicMock()
+    monkeypatch.setitem(sys.modules, 'FC_SSH', mock_ssh)
+    
+    # Mock FC_command_parser
+    mock_cp = MagicMock()
+    mock_cp_instance = MagicMock()
+    mock_cp_instance.parse_command_defs.return_value = {}
+    mock_cp.CommandParser.return_value = mock_cp_instance
+    monkeypatch.setitem(sys.modules, 'FC_command_parser', mock_cp)
 
 @pytest.fixture
 def app(mock_tkinter):
