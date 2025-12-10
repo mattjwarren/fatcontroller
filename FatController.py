@@ -32,7 +32,7 @@ class FatController(ttk.Window):
         super().__init__(themename="darkly")
         
         self.title("FatController")
-        self.geometry("1024x768")
+        self.geometry("3072x1536")
         
         self.aliases={}  #Dictionary of aliasname/command 
         self.substitutions={}
