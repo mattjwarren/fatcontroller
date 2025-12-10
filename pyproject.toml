@@ -21,7 +21,8 @@ authors = [
 test = [
     "pytest",
     "pytest-mock",
-    "pytest-cov"
+    "pytest-cov",
+    "pytest-asyncio"
 ]
 
 [project.scripts]
@@ -56,3 +57,5 @@ py-modules = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"

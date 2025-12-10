@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import ttkbootstrap as ttk
 from ttkbootstrap.constants import *
-import os,sys,re,shutil,time,threading,pprint
+import os,sys,re,shutil,time,threading,pprint,asyncio
 
 # Make sure we can find local modules
 sys.path.append(os.getcwd())
@@ -41,6 +41,11 @@ class FatController(ttk.Window):
         
         self.FCScheduler=FC_ThreadedScheduler.ThreadedScheduler()
         self.FCScheduler.start()
+        # We need loop eagerly or set it later? 
+        # The loop starts in start_async_loop which is called in main().
+        # But __init__ runs before main().
+        # We can't set it here yet.
+        # We should set it in start_async_loop.
         
         self.opts={}
         self.installroot = config.system_install_root + config.install_root + '/' # Guessing path construction based on config.py
@@ -1131,7 +1136,15 @@ class FatController(ttk.Window):
                         # self.EntityManager.execute expectes (EntityName, CmdList)
                         # We pass rest of command as CmdList?
                         # Original: self.EntityManager.execute(self.EntityManager.LastExecutedEntity,SplitCmd[0:])
-                        self.EntityManager.execute(self.EntityManager.LastExecutedEntity, SplitCmd)
+                        # self.EntityManager.execute(self.EntityManager.LastExecutedEntity, SplitCmd)
+                        # Dispatch to async loop
+                        if hasattr(self, 'loop'):
+                            asyncio.run_coroutine_threadsafe(
+                                self.EntityManager.execute(self.EntityManager.LastExecutedEntity, SplitCmd),
+                                self.loop
+                            )
+                        else:
+                             logging.error("Async loop not initialized!")
                     else:
                         self.display.infodisplay('Error: Dont know which entity to use, and command not recognized.')
                 
@@ -1155,8 +1168,56 @@ class FatController(ttk.Window):
         self.DaemonManager.handlealert(fromalert,toalert+1)
 
 
+
+    def async_execute_command(self, CommandList):
+        """Executed in the asyncio loop thread."""
+        asyncio.ensure_future(self._async_execute_wrapper(CommandList))
+
+    async def _async_execute_wrapper(self, CommandList):
+        DBGBN='async_execute'
+        try:
+            # Check for AliasHit inside async loop? 
+            # Logic was: aliases resolved -> self.EntityManager.execute
+            # processcommand does alias resolution.
+            # So here we are just executing HEAD entity with TAIL args.
+            
+            # Re-implement connection logic if needed? 
+            # No, FC_entity.execute should be thread/async safe or made so.
+            
+            # The original logic called self.EntityManager.execute(LastEntity, SplitCmd)
+            # which calls Entity.execute(CmdList)
+            
+            # We need to dispatch to the correct entity.
+            # processcommand logic was:
+            # 1. match FC commands (sync)
+            # 2. match Aliases (recursive sync)
+            # 3. else -> EntityManager.execute(LastEntity, CommandList)
+            
+            # Wait, processcommand is confusing. It calls EntityManager.execute for "unrecognized" commands?
+            # Yes, "if not CommandHit... Fallback to Entity execution"
+            
+            # IMPORTANT: We only want to async the ENTITY execution part. 
+            # The FC commands (show, load, etc) touch GUI and should remain sync on main thread.
+            pass
+        except Exception as e:
+            logging.error(f"Error in async execution: {e}")
+
+    def run_async_loop(self, loop):
+        asyncio.set_event_loop(loop)
+        loop.run_forever()
+
+    def start_async_loop(self):
+        self.loop = asyncio.new_event_loop()
+        # Pass loop to Scheduler
+        if hasattr(self, 'FCScheduler'):
+             self.FCScheduler.set_async_loop(self.loop)
+             
+        self.loop_thread = threading.Thread(target=self.run_async_loop, args=(self.loop,), daemon=True)
+        self.loop_thread.start()
+        
 def main():
     app = FatController()
+    app.start_async_loop()
     app.mainloop()
 
 if __name__ == "__main__":

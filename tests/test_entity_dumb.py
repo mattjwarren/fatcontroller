@@ -12,11 +12,12 @@ class TestEntityDumb:
         assert entity.getentitytype() == "DUMB"
         assert entity.gettype() == "simple"
 
-    def test_execute(self, entity):
+    @pytest.mark.asyncio
+    async def test_execute(self, entity):
         cmd_list = ["some", "command"]
-        result = entity.execute(cmd_list)
+        result = await entity.execute(cmd_list)
         # Verify it inserts the "I would have executed this" line
-        assert "I would have executed this\n" in result
+        assert "I would have executed this" in result[0] 
         assert "some" in result
         assert "command" in result
 

@@ -22,7 +22,7 @@ get it added to the tasks to be run.
 from threading import Thread, Event
 import time
 import logging
-#from exception import IOError
+#from exception IOError
 
 class ThreadedScheduler(Thread):
     """
@@ -45,6 +45,10 @@ class ThreadedScheduler(Thread):
         self._onDemand = {}
         self._isRunning = 0
         if daemon: self.setDaemon(1)
+        self.loop = None
+
+    def set_async_loop(self, loop):
+        self.loop = loop
 
 
     ## Event Methods ##

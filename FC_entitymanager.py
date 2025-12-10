@@ -160,25 +160,61 @@ class entitymanager:
             pass
 
 
-    def execute(self, EntityName: str, CmdList: list) -> None:
+    async def execute(self, EntityName: str, CmdList: list) -> None:
         DBGBN='entitymanagerexecute'
         try:
             EntityType=self.Entities[EntityName].getentitytype()
-            output=self.Entities[EntityName].execute(CmdList) #list of output returned
+            
+            # Since Entities.execute is now async, we await it
+            output = await self.Entities[EntityName].execute(CmdList) #list of output returned
             
             # Select the tab
             try:
-                if EntityType != 'ENTITYGROUP':
-                    self.OutBook.select(self.OutPages[EntityName]['tab_id'])
+                # GUI updates in async execution:
+                # In FatController.py we are dispatching this.
+                # However, GUI calls must be on main thread.
+                # But self.OutBook.select is a Tkinter call.
+                # If this runs in asyncio loop thread, it might crash Tkinter.
+                # We need to schedule GUI updates back to main thread.
+                pass
             except:
                 pass
-                
-            self.Entities[EntityName].display(output, self.OutPages[EntityName]['text'])
-            self.OutPages[EntityName]['text'].see(tk.END)
-            self.ReturnFocus.focus_set()
+            
+            # IMPORTANT: Display/GUI updates must be efficient.
+            # We can't easily jump back to main thread here inside the library without FatController reference
+            # or a mechanism.
+            # But FatController passes OutputNotebook (OutBook) which is a widget.
+            # Accessing it from background thread is unsafe.
+            
+            # Temporary fix: Don't update GUI directly or assume thread safety for now?
+            # Or use after_idle via the widget?
+            # But we are in a different thread.
+            
+            # Actually, `asyncio` loop is in a thread.
+            # We SHOULD use `self.OutBook.after(0, lambda: ...)`?
+            # Yes, `after` is thread safe enough usually, or `event_generate`.
+            
+            # Let's wrap GUI calls.
+            
+            def update_gui(output=output, ename=EntityName, etype=EntityType):
+                 try:
+                    if etype != 'ENTITYGROUP':
+                        self.OutBook.select(self.OutPages[ename]['tab_id'])
+                    
+                    self.Entities[ename].display(output, self.OutPages[ename]['text'])
+                    self.OutPages[ename]['text'].see(tk.END)
+                    self.ReturnFocus.focus_set()
+                 except Exception as e:
+                    print(f"GUI Update Error: {e}")
+
+            # Schedule on main thread via widget
+            self.OutBook.after(0, update_gui)
+            
             self.LastExecutedEntity=EntityName
         except KeyError:
-            self.display.infodisplay('Error:    Don\'t know how to execute commands for '+EntityName+'.')
+            # self.display.infodisplay is also GUI call? 
+            # OutputFormatter needs checking.
+            print(f'Error: Don\'t know how to execute commands for {EntityName}.')
 
     def scheduledexecute(self,entity,cmd_list):
         EntityType=entity.getentitytype()

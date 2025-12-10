@@ -17,10 +17,26 @@ class ENTITYGROUP(FC_entity.entity):
 
     Opts={}
 
-    def execute(self,CmdList):
-        for Entity in self.Entities:
-            self.EntityManager.execute(Entity,CmdList)
-        return ['\nEntityGroup executed command.\n']
+    async def execute(self,CmdList):
+        import asyncio
+        OutputList=[]
+        OutputList.append('Executing command against group '+self.Name)
+        
+        # We want to execute against all members in parallel?
+        # The user requested "all entity command executions asynchronously".
+        # Parallel execution for groups makes sense.
+        
+        tasks = []
+        for entity in self.Entities:
+            # We call the EntityManager.execute, which handles UI and calling entity.execute
+            # Wait, EntityManager.execute is now async too.
+            tasks.append(self.EntityManager.execute(entity, CmdList))
+            
+        if tasks:
+             await asyncio.gather(*tasks)
+             
+        OutputList.append('Group execution initiated.')
+        return OutputList
 
     def display(self,LineList,OutputCtrl):
         for line in LineList:

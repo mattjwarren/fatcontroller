@@ -47,22 +47,49 @@ class daemon(FC_ScheduledTask.ScheduledTask):
         self.schedule=FC_daemonschedule.daemonschedule()
         self.AlertManager=alertmanager
 
-    def run(adaemon): #adaemon
-        for task_name,task in list(adaemon.tasks.items()):
-            entities=list(adaemon.tasks[tsk].entities.items())
-            for entity_name,entity in entities:
-                cmd_output=entity.execute(adaemon.tasks[task_name].command)
-                collectors=list(adaemon.tasks[tsk].collectors.items())
-                for collector_name,collector in collectors:
-                    collector.read(cmd_output,adaemon,adaemon.tasks[tsk],collector,ent)
-                    collectorfile=collectors[collector].data_filename
-                    if collectorfile!=None:
-                        outfile_path=os.path.join(config.data_path,collectorfile)
-                        outfile_path=outfile_path+("_%s_%s_%s_%s" % (adaemon.name,tsk,ent,collector.name)) 
-                        outfile=open(outfile_path,'a')
-                        timestamp=str(time.ctime(float(time.time())))
-                        outfile.write(timestamp+','+collectors[collector].lastoutline+'\n')
-                        outfile.close()
+    async def run(adaemon): #adaemon
+        import logging
+        import asyncio
+        import time
+        import os
+        
+        # dbg('Starting run for >|'+adaemon.name+'|<',DBGBN)
+        for task_name, task in list(adaemon.tasks.items()):
+            # dbg('Doing task >|'+task_name+'|<',DBGBN)
+            
+            # The original code seemingly had a variable naming issue with 'tsk'. 
+            # We assume tsk meant task_name.
+            
+            entities = list(task.entities.items())
+            for entity_name, entity in entities:
+                try:
+                    # execute is now async
+                    cmd_output = await entity.execute(task.command)
+                    
+                    collectors = list(task.collectors.items())
+                    for collector_name, collector in collectors:
+                        # collector.read logic seems synchronous and cpu bound mostly (parsing).
+                        # We can run it directly or wrap it if very expensive.
+                        # Assuming fast enough for now.
+                        collector.read(cmd_output, adaemon, task, collector, entity)
+                        
+                        collectorfile = collector.data_filename
+                        if collectorfile is not None:
+                            outfile_path = os.path.join(config.data_path, collectorfile)
+                            # Append extra info to filename specific to this run context?
+                            # Original: outfile_path=outfile_path+("_%s_%s_%s_%s" % (adaemon.name,tsk,ent,collector.name))
+                            # Fixing var names:
+                            outfile_path = outfile_path + ("_%s_%s_%s_%s" % (adaemon.name, task_name, entity_name, collector.name)) 
+                            
+                            try:
+                                with open(outfile_path, 'a') as outfile:
+                                    timestamp = str(time.ctime(float(time.time())))
+                                    outfile.write(timestamp + ',' + collector.lastoutline + '\n')
+                            except Exception as e:
+                                logging.error(f"Error writing collector output: {e}")
+                                
+                except Exception as e:
+                    logging.error(f"Error executing task {task_name} on entity {entity_name}: {e}")
 
     def setschedule(self,start,end,period):
         self.schedule.updateschedule(start,end,period)

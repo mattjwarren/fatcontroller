@@ -43,15 +43,28 @@ class ScheduledTaskHandler:
 
     def runTask(self):
         """
-        Runs this task in a background thread.
+        Runs this task in the asyncio loop defined in scheduler.
         """
+        import asyncio
         if self._suspend:
             self._scheduler.notifyCompletion(self)
             return
+        
         self._rerurn = 0
-        self._thread = Thread(None, self._task._run, self.name(), (self,))
         self._isRunning = 1
-        self._thread.start()
+
+        # We need the loop.
+        if hasattr(self._scheduler, 'loop') and self._scheduler.loop:
+             # Schedule correct coroutine
+             asyncio.run_coroutine_threadsafe(self._task._run(self), self._scheduler.loop)
+        else:
+             # Fallback or Error?
+             # Without loop we can't run async daemon.
+             print("ERROR: Scheduler has no asyncio loop attached!")
+             self._isRunning = 0
+             
+        # self._thread = Thread(None, self._task._run, self.name(), (self,))
+        # self._thread.start()
 
     def reschedule(self):
         """

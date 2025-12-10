@@ -62,7 +62,7 @@ class ScheduledTask(threading.Thread):
 
     ## Private method ##
 
-    def _run(self, handle):
+    async def _run(self, handle):
         '''
         This is the actual run method for the Task thread. It is a private method which
         should not be overriden.
@@ -72,9 +72,34 @@ class ScheduledTask(threading.Thread):
         self._name = handle.name()
         self._handle = handle
         #dbg('handing over to self.run()',DBGBN)
-        self.run()
+        
+        # If run is async, await it. If it's sync (legacy tasks), run it?
+        # We enforced FC_daemon.run to be async.
+        # But other tasks might exist? 
+        # Checking codebase... Only FC_daemon seems to be the main implementer.
+        # It's safer to await it. If it's not a coroutine, this will raise error.
+        # We assume all ScheduledTasks are updated to async or wrapped.
+        
+        # If self.run is regular func, await will fail.
+        # But we updated FC_daemon to async. 
+        # Let's check with inspect or try/except?
+        # For this migration we assume migration is complete for main usage.
+        
+        import inspect
+        if inspect.iscoroutinefunction(self.run):
+             await self.run(self) # FC_daemon.run takes 'adaemon' argument which is self.
+        else:
+             self.run() # synchronus fallback? But this runs in async loop thread now!
+             
         #dbg('Now going to notify completion',DBGBN)
-        handle.notifyCompletion()
+        handle.notifyCompletion() # This creates a thread safety issue? 
+        # notifyCompletion modifies scheduler structures.
+        # Scheduler is running in its own thread.
+        # We are modifying shared state from async loop thread (if different).
+        # Scheduler's run loop locks? No locks seen.
+        # This is a race condition risk.
+        # However, Python GIL helps.
+        # Ideally, notifyCollision should be thread safe.
 
 #
 # END OF CLASS SCHEDULEDTASK

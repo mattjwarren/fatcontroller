@@ -1,5 +1,6 @@
 import FC_entity
 import logging
+import asyncio
 try:
     from fabric import Connection, Config
     from invoke.exceptions import UnexpectedExit
@@ -95,12 +96,14 @@ class SSH(FC_entity.entity):
             logging.error(f"FC_SSH [{self.Name}]: Error creating Connection object: {e}")
             return None
 
-    def execute(self, CmdList):
+    async def execute(self, CmdList):
         logging.debug(f"FC_SSH [{self.Name}]: execute called with {CmdList}")
         Output = []
+        
+        # Connection logic must be thread-safe or run in executor if it blocks
+        # Fabric connection creation is fast/lazy, but open() blocks.
         if self.Connection is None:
             logging.warning(f"FC_SSH [{self.Name}]: Connection was None, attempting to create.")
-            # Try to recreate if missing (e.g. import failed previously but maybe fixed? unlikely)
             self.Connection = self._create_connection()
             if self.Connection is None:
                 return ["Error: Fabric library not found or initialization failed"]
@@ -108,26 +111,21 @@ class SSH(FC_entity.entity):
         cmd_str = ' '.join(CmdList)
         logging.debug(f"FC_SSH [{self.Name}]: Preparing to run '{cmd_str}'")
         
-        # Retry loop (Try once, then retry once if failed)
-        retries = 1
-        attempt = 0
+        loop = asyncio.get_event_loop()
         
-        while attempt <= retries:
-            attempt += 1
+        # Retry loop logic
+        retries = 1
+        for attempt in range(1, retries + 2):
             logging.debug(f"FC_SSH [{self.Name}]: Attempt {attempt} of {retries+1}")
             try:
-                # Ensure connection is open (authentication happens here)
-                if not self.Connection.is_connected:
-                    logging.debug(f"FC_SSH [{self.Name}]: Not connected. Calling open()...")
-                    self.Connection.open()
-                    logging.debug(f"FC_SSH [{self.Name}]: open() returned. Connected: {self.Connection.is_connected}")
-                else:
-                    logging.debug(f"FC_SSH [{self.Name}]: Already connected.")
-                    
-                # usage of warn=True to not raise UnexpectedExit on non-zero return codes,
-                # so we can capture stderr/stdout manually.
-                logging.debug(f"FC_SSH [{self.Name}]: Calling self.Connection.run()...")
-                result = self.Connection.run(cmd_str, hide=True, warn=True)
+                # Run blocking Fabric calls in executor
+                def blocking_ssh_run():
+                    if not self.Connection.is_connected:
+                         self.Connection.open()
+                    return self.Connection.run(cmd_str, hide=True, warn=True)
+
+                result = await loop.run_in_executor(None, blocking_ssh_run)
+                
                 logging.debug(f"FC_SSH [{self.Name}]: Run returned. Exited: {result.exited}")
                 
                 if result.stdout:
@@ -140,7 +138,7 @@ class SSH(FC_entity.entity):
                         Output.append("--- STDERR ---")
                     Output.extend(result.stderr.splitlines())
                 
-                # Success, break loop
+                # Success
                 break
                 
             except Exception as e:
@@ -150,14 +148,12 @@ class SSH(FC_entity.entity):
                 
                 if attempt <= retries:
                     logging.warning(f"SSH Execution failed for {self.Name}: {e}. Retrying...")
-                    # Force close and retry
+                    # Force close and retry - in executor? close() might block?
                     try: 
-                        logging.debug(f"FC_SSH [{self.Name}]: Closing connection...")
-                        self.Connection.close()
+                        await loop.run_in_executor(None, self.Connection.close)
                     except: 
                         pass
-                    # Recreate connection object to be safe against state corruption
-                    logging.debug(f"FC_SSH [{self.Name}]: Recreating connection object...")
+                    # Recreate connection object
                     self.Connection = self._create_connection()
                 else:
                     logging.error(f"SSH Execution failed for {self.Name}: {e}")

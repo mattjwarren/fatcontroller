@@ -12,7 +12,7 @@ class entity:
     def __init__(self):
         pass
 
-    def execute(self,CmdList):
+    async def execute(self,CmdList):
         '''Generic method.
 
         CmdList should be parsed and executed against the given entity (self).

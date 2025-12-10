@@ -12,36 +12,53 @@ class TestEntityLocal:
         assert entity.getname() == "TestLocal"
         assert entity.getentitytype() == "LOCAL"
 
-    @patch('subprocess.Popen')
-    def test_execute_success(self, mock_popen, entity):
-        # Mock subprocess
-        process_mock = MagicMock()
-        process_mock.stdout.readlines.return_value = ["Output line 1\n", "Output line 2"]
-        process_mock.stderr.readlines.return_value = []
-        mock_popen.return_value = process_mock
+    @pytest.mark.asyncio
+    async def test_execute_success(self, entity):
+        import asyncio
+        # Mock asyncio.create_subprocess_shell
+        with patch('asyncio.create_subprocess_shell') as mock_create:
+             mock_process = MagicMock()
+             
+             # communicate must be awaitable
+             f = asyncio.Future()
+             f.set_result((b"Output line 1\nOutput line 2", b""))
+             mock_process.communicate.return_value = f
+             
+             # create_subprocess_shell returns awaitable process
+             async def get_mock_process(*args, **kwargs):
+                  return mock_process
+             
+             mock_create.side_effect = get_mock_process
+             
+             result = await entity.execute(["ls", "-l"])
+             
+             mock_create.assert_called_once()
+             assert "Output line 1" in result
+             assert "Output line 2" in result
 
-        result = entity.execute(["ls", "-l"])
-        
-        mock_popen.assert_called_once()
-        # Verify result contains stdout
-        assert "Output line 1\n" in result
-        assert "Output line 2" in result
+    @pytest.mark.asyncio
+    async def test_execute_error(self, entity):
+        import asyncio
+        with patch('asyncio.create_subprocess_shell') as mock_create:
+             mock_process = MagicMock()
+             
+             f = asyncio.Future()
+             f.set_result((b"", b"Error happened"))
+             mock_process.communicate.return_value = f
+             
+             async def get_mock_process(*args, **kwargs):
+                  return mock_process
+             
+             mock_create.side_effect = get_mock_process
+             
+             result = await entity.execute(["bad_command"])
+             
+             assert "Error happened" in result
 
-    @patch('subprocess.Popen')
-    def test_execute_error(self, mock_popen, entity):
-        process_mock = MagicMock()
-        process_mock.stdout.readlines.return_value = []
-        process_mock.stderr.readlines.return_value = ["Error happened"]
-        mock_popen.return_value = process_mock
-
-        result = entity.execute(["bad_command"])
-        
-        assert "Error happened" in result
-
-    @patch('subprocess.Popen')
-    def test_execute_exception(self, mock_popen, entity):
-        mock_popen.side_effect = Exception("Subprocess failed")
-        
-        result = entity.execute(["cmd"])
-        assert len(result) == 1
-        assert "Error executing command: Subprocess failed" in result[0]
+    @pytest.mark.asyncio
+    async def test_execute_exception(self, entity):
+        # We can simulate exception in creation
+        with patch('asyncio.create_subprocess_shell', side_effect=Exception("Subprocess failed")) as mock_create:
+             result = await entity.execute(["cmd"])
+             assert len(result) == 1
+             assert "Error executing command: Subprocess failed" in result[0]

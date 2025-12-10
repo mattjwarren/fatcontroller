@@ -15,14 +15,17 @@ class DUMB(FC_entity.entity):
 
     Opts={} #for holding settable entity options
 
-    def execute(self,CmdList):
-        '''Generic method.
-    
-        CmdList should be parsed and executed against the given entity (self).
-        The return value should be a list of output elements readable by
-        entity.display()'''
-        CmdList.insert(0,'I would have executed this\n')
-        return CmdList # List of lines readable by display() method
+    async def execute(self,CmdList):
+        import asyncio
+        OutputList=[]
+        OutputList.append('I would have executed this')
+        for i in CmdList:
+            OutputList.append(i)
+        
+        # Simulate slight delay?
+        # await asyncio.sleep(0.1)
+        
+        return OutputList# List of lines readable by display() method
 
     def display(self,LineList,OutputCtrl):
         '''Generic method for displaying output from entity.execute().

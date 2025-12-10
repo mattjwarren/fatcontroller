@@ -12,14 +12,27 @@ class LOCAL(FC_entity.entity):
 
     Opts={}
 
-    def execute(self,CmdList):
+    async def execute(self,CmdList):
+        import asyncio
+        import shlex
         # din,dout,derr=os.popen3(' '.join(CmdList))
         try:
-            p = subprocess.Popen(' '.join(CmdList), shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-            output = p.stdout.readlines()
-            errout = p.stderr.readlines()
-            # dummy=[output.append(err) for err in errout]  
-            output.extend(errout) # More pythonic
+            cmd = ' '.join(CmdList)
+            # Use create_subprocess_shell for shell=True equivalent
+            process = await asyncio.create_subprocess_shell(
+                cmd,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
+            
+            stdout, stderr = await process.communicate()
+            
+            output = []
+            if stdout:
+                output.extend(stdout.decode().splitlines())
+            if stderr:
+                output.extend(stderr.decode().splitlines())
+                
         except Exception as e:
             output = [f"Error executing command: {e}"]
         return output# List of lines readable by display() method
