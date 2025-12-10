@@ -18,7 +18,7 @@ class TestFCStackSSH(unittest.TestCase):
         # Since we can't easily control the import inside the module once loaded, 
         # we will patch 'FC_SSH.paramiko'
         
-        self.patcher = patch('FC_SSH.paramiko', self.mock_paramiko)
+        self.patcher = patch.object(FC_SSH, 'paramiko', self.mock_paramiko)
         self.patcher.start()
         
         # Define a real exception class for the mock to use

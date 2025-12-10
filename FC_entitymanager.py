@@ -280,6 +280,18 @@ class entitymanager:
         return OptList # list of lists
 
 
+    def get_entity_types_metadata(self):
+        """Returns a dict of entity types and their required parameters (excluding name)."""
+        return {
+            'TSM': ['Address', 'Port', 'AdminUser', 'AdminPass', 'Node'],
+            'TELNET': ['IPAddress', 'UserName', 'Password', 'Prompt'],
+            'SSH': ['Host', 'User', 'Password', 'KeyFile'],
+            'DUMB': [],
+            'LOCAL': [],
+            # 'ENTITYGROUP': [] # Special handling needed
+        }
+
 #
 # END OF CLASS entitymanager
+#
 ###########

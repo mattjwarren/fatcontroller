@@ -41,6 +41,19 @@ def mock_tkinter(monkeypatch):
     mock_tk_module.Text = MockWidgetFactory
     mock_tk_module.Scrollbar = MockWidgetFactory
     mock_tk_module.Entry = MockWidgetFactory
+    mock_tk_module.Label = MockWidgetFactory
+    mock_tk_module.Button = MockWidgetFactory
+    mock_tk_module.Listbox = MockWidgetFactory
+    
+    class MockStringVar:
+        def __init__(self, value='', *args, **kwargs):
+            self._value = value
+        def get(self):
+            return self._value
+        def set(self, value):
+            self._value = value
+            
+    mock_tk_module.StringVar = MockStringVar
     
     # Constants
     mock_tk_module.END = 'end'
@@ -55,6 +68,7 @@ def mock_tkinter(monkeypatch):
     mock_tk_module.WORD = 'word'
     mock_tk_module.NONE = 'none'
     mock_tk_module.RAISED = 'raised'
+    mock_tk_module.EXTENDED = 'extended'
     
     monkeypatch.setitem(sys.modules, 'tkinter', mock_tk_module)
     
@@ -63,9 +77,22 @@ def mock_tkinter(monkeypatch):
     mock_ttk.Frame = MockWidgetFactory
     mock_ttk.Scrollbar = MockWidgetFactory
     mock_ttk.Treeview = MockWidgetFactory
+    mock_ttk.Combobox = MockWidgetFactory
     
     monkeypatch.setitem(sys.modules, 'tkinter.ttk', mock_ttk)
     monkeypatch.setitem(sys.modules, 'ttk', mock_ttk)
+    
+    # Mock FC_SSH to prevent network calls during testing
+    mock_ssh = MagicMock()
+    monkeypatch.setitem(sys.modules, 'FC_SSH', mock_ssh)
+    
+    # Mock FC_command_parser to prevent "load general" and file reads
+    mock_cp = MagicMock()
+    # Ensure CommandParser class returns a mock that has parse_command_defs
+    mock_cp_instance = MagicMock()
+    mock_cp_instance.parse_command_defs.return_value = {}
+    mock_cp.CommandParser.return_value = mock_cp_instance
+    monkeypatch.setitem(sys.modules, 'FC_command_parser', mock_cp)
 
 @pytest.fixture
 def app(mock_tkinter):
