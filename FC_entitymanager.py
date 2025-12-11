@@ -83,8 +83,8 @@ class entitymanager:
         return self.Entities[EntityName].getparameterstring()
 
     # # Need to change this, coupling between entitymanager and entities. Shouldnt need to know numb of parms needed
-    async def execute(self, EntityName: str, CmdList: list, trace_id=None):                                #TSMServer tpyeparms;    ['name','adminuser','adminpass']
-        EntityName = None
+    def define(self, type, typeparms):                                #TSMServer tpyeparms;    ['name','adminuser','adminpass']
+        EntityName=None
         if type=='TSM':                                 #becomes Entites{'name',['adminuser','adminpass']}
             if len(typeparms)==6:
                 EntityName=typeparms[0]
