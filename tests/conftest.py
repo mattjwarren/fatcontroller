@@ -79,7 +79,7 @@ def mock_tkinter(monkeypatch):
     # Mock ttkbootstrap
     mock_ttkbootstrap = types.ModuleType('ttkbootstrap')
     mock_ttkbootstrap.Window = MockTk
-    for w in ['Frame', 'Label', 'Entry', 'Button', 'PanedWindow', 'Notebook', 'Combobox', 'Scrollbar']:
+    for w in ['Frame', 'Label', 'Entry', 'Button', 'Panedwindow', 'Notebook', 'Combobox', 'Scrollbar']:
         setattr(mock_ttkbootstrap, w, MockWidgetFactory)
     
     # Mock ttkbootstrap.constants

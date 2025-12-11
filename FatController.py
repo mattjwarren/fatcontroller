@@ -91,11 +91,11 @@ class FatController(ttk.Window):
         #############
         
         # Main Vertical Splitter
-        self.VSplitter = ttk.PanedWindow(self, orient=tk.HORIZONTAL)
+        self.VSplitter = ttk.Panedwindow(self, orient=tk.HORIZONTAL)
         self.VSplitter.pack(fill=tk.BOTH, expand=True)
         
         # Left Side (Notebook + Shell)
-        self.LSplitter = ttk.PanedWindow(self.VSplitter, orient=tk.VERTICAL)
+        self.LSplitter = ttk.Panedwindow(self.VSplitter, orient=tk.VERTICAL)
         self.VSplitter.add(self.LSplitter, weight=3) # Main area
         
         # Right Side (Tree)
