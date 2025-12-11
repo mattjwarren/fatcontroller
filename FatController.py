@@ -80,6 +80,7 @@ class FatController(ttk.Window):
         # Initialize Command Parser and load definitions
         self.CommandParser = FC_command_parser.CommandParser(self)
         try:
+             print(f"DEBUG: Loading commands from {self.installroot+'FatControllerCommands.sav'}")
              self.CommandDefinitions = self.CommandParser.parse_command_defs(self.installroot+'FatControllerCommands.sav')
         except Exception as e:
              # messagebox.showerror("Error", f"Could not load command definitions: {e}")

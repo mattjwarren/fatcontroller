@@ -1,0 +1,894 @@
+2025-12-11 22:50:23,356 - INFO - [fatcontroller.py:163] - Logging initialized. Writing to file: logs.txt
+2025-12-11 22:50:23,386 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: load general
+2025-12-11 22:50:23,386 - DEBUG - [fatcontroller.py:1126] - Command is: load general
+2025-12-11 22:50:23,386 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: load general
+2025-12-11 22:50:23,386 - DEBUG - [fatcontroller.py:1183] - DEBUGMJW: H:/Documents/dev/git_repos/fatcontroler/fatcontroler/general.sav
+2025-12-11 22:50:23,387 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity LOCAL me
+
+2025-12-11 22:50:23,387 - DEBUG - [fatcontroller.py:1126] - Command is: define entity LOCAL me
+
+2025-12-11 22:50:23,387 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity LOCAL me
+
+2025-12-11 22:50:23,387 - ERROR - [FC_command_parser.py:163] - Method define not found
+2025-12-11 22:50:23,387 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity SSH pi1 192.168.1.101 matt matt None
+
+2025-12-11 22:50:23,387 - DEBUG - [fatcontroller.py:1126] - Command is: define entity SSH pi1 192.168.1.101 matt matt None
+
+2025-12-11 22:50:23,387 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity SSH pi1 192.168.1.101 matt matt None
+
+2025-12-11 22:50:23,388 - ERROR - [FC_command_parser.py:163] - Method define not found
+2025-12-11 22:50:23,388 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity SSH pi2 192.168.1.102 matt matt
+
+2025-12-11 22:50:23,388 - DEBUG - [fatcontroller.py:1126] - Command is: define entity SSH pi2 192.168.1.102 matt matt
+
+2025-12-11 22:50:23,388 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity SSH pi2 192.168.1.102 matt matt
+
+2025-12-11 22:50:23,388 - ERROR - [FC_command_parser.py:163] - Method define not found
+2025-12-11 22:50:23,388 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity SSH pi3 192.168.1.103 matt matt
+
+2025-12-11 22:50:23,388 - DEBUG - [fatcontroller.py:1126] - Command is: define entity SSH pi3 192.168.1.103 matt matt
+
+2025-12-11 22:50:23,388 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity SSH pi3 192.168.1.103 matt matt
+
+2025-12-11 22:50:23,389 - ERROR - [FC_command_parser.py:163] - Method define not found
+2025-12-11 22:50:23,389 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity ENTITYGROUP Rpis pi1 pi2 pi3
+
+2025-12-11 22:50:23,389 - DEBUG - [fatcontroller.py:1126] - Command is: define entity ENTITYGROUP Rpis pi1 pi2 pi3
+
+2025-12-11 22:50:23,389 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity ENTITYGROUP Rpis pi1 pi2 pi3
+
+2025-12-11 22:50:23,389 - ERROR - [FC_command_parser.py:163] - Method define not found
+2025-12-11 22:50:23,389 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity SSH server 192.168.1.199 matt EggFishPants99DG
+
+2025-12-11 22:50:23,389 - DEBUG - [fatcontroller.py:1126] - Command is: define entity SSH server 192.168.1.199 matt EggFishPants99DG
+
+2025-12-11 22:50:23,389 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity SSH server 192.168.1.199 matt EggFishPants99DG
+
+2025-12-11 22:50:23,389 - ERROR - [FC_command_parser.py:163] - Method define not found
+2025-12-11 22:50:23,389 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: alias loadall load general
+
+2025-12-11 22:50:23,390 - DEBUG - [fatcontroller.py:1126] - Command is: alias loadall load general
+
+2025-12-11 22:50:23,390 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: alias loadall load general
+
+2025-12-11 22:50:23,390 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: alias saveall save all general
+
+2025-12-11 22:50:23,391 - DEBUG - [fatcontroller.py:1126] - Command is: alias saveall save all general
+
+2025-12-11 22:50:23,391 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: alias saveall save all general
+
+2025-12-11 22:50:23,392 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute pendingdates select pending_date from volumes where status='PENDING' order by pending_date
+
+2025-12-11 22:50:23,392 - DEBUG - [fatcontroller.py:1126] - Command is: substitute pendingdates select pending_date from volumes where status='PENDING' order by pending_date
+
+2025-12-11 22:50:23,392 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute pendingdates select pending_date from volumes where status='PENDING' order by pending_date
+
+2025-12-11 22:50:23,393 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute xn x nsk
+
+2025-12-11 22:50:23,393 - DEBUG - [fatcontroller.py:1126] - Command is: substitute xn x nsk
+
+2025-12-11 22:50:23,393 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute xn x nsk
+
+2025-12-11 22:50:23,394 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute claimable "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:50:23,394 - DEBUG - [fatcontroller.py:1126] - Command is: substitute claimable "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:50:23,394 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute claimable "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:50:23,395 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute xm x mustoUnix
+
+2025-12-11 22:50:23,395 - DEBUG - [fatcontroller.py:1126] - Command is: substitute xm x mustoUnix
+
+2025-12-11 22:50:23,395 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute xm x mustoUnix
+
+2025-12-11 22:50:23,396 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute scratch "select mediatype,count(*) from libvolumes where status='Scratch' group by mediatype"
+
+2025-12-11 22:50:23,396 - DEBUG - [fatcontroller.py:1126] - Command is: substitute scratch "select mediatype,count(*) from libvolumes where status='Scratch' group by mediatype"
+
+2025-12-11 22:50:23,396 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute scratch "select mediatype,count(*) from libvolumes where status='Scratch' group by mediatype"
+
+2025-12-11 22:50:23,397 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute al addline
+
+2025-12-11 22:50:23,397 - DEBUG - [fatcontroller.py:1126] - Command is: substitute al addline
+
+2025-12-11 22:50:23,398 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute al addline
+
+2025-12-11 22:50:23,398 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute xc x core
+
+2025-12-11 22:50:23,398 - DEBUG - [fatcontroller.py:1126] - Command is: substitute xc x core
+
+2025-12-11 22:50:23,398 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute xc x core
+
+2025-12-11 22:50:23,401 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute xr x rcl
+
+2025-12-11 22:50:23,401 - DEBUG - [fatcontroller.py:1126] - Command is: substitute xr x rcl
+
+2025-12-11 22:50:23,401 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute xr x rcl
+
+2025-12-11 22:50:23,401 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute retentions select domain_name,set_name,class_name,verexists,verdeleted,retextra,retonly from bu_copygroups
+
+2025-12-11 22:50:23,402 - DEBUG - [fatcontroller.py:1126] - Command is: substitute retentions select domain_name,set_name,class_name,verexists,verdeleted,retextra,retonly from bu_copygroups
+
+2025-12-11 22:50:23,402 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute retentions select domain_name,set_name,class_name,verexists,verdeleted,retextra,retonly from bu_copygroups
+
+2025-12-11 22:50:23,402 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline claimable x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=~2) group by mediatype"
+
+2025-12-11 22:50:23,403 - DEBUG - [fatcontroller.py:1126] - Command is: addline claimable x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=~2) group by mediatype"
+
+2025-12-11 22:50:23,403 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline claimable x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=~2) group by mediatype"
+
+2025-12-11 22:50:23,409 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch set TSM DATAONLY yes
+
+2025-12-11 22:50:23,409 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch set TSM DATAONLY yes
+
+2025-12-11 22:50:23,409 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch set TSM DATAONLY yes
+
+2025-12-11 22:50:23,410 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg -
+
+2025-12-11 22:50:23,410 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg -
+
+2025-12-11 22:50:23,410 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg -
+
+2025-12-11 22:50:23,411 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg - SCRATCH REPORT FOR ~1 -
+
+2025-12-11 22:50:23,411 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg - SCRATCH REPORT FOR ~1 -
+
+2025-12-11 22:50:23,411 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg - SCRATCH REPORT FOR ~1 -
+
+2025-12-11 22:50:23,412 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg -
+
+2025-12-11 22:50:23,412 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg -
+
+2025-12-11 22:50:23,412 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg -
+
+2025-12-11 22:50:23,413 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch x ~1 select mediatype,count\(\*\) from libvolumes where status=\'Scratch\' group by mediatype
+
+2025-12-11 22:50:23,413 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch x ~1 select mediatype,count\(\*\) from libvolumes where status=\'Scratch\' group by mediatype
+
+2025-12-11 22:50:23,413 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch x ~1 select mediatype,count\(\*\) from libvolumes where status=\'Scratch\' group by mediatype
+
+2025-12-11 22:50:23,415 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg -
+
+2025-12-11 22:50:23,415 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg -
+
+2025-12-11 22:50:23,415 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg -
+
+2025-12-11 22:50:23,416 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg - PENDING COUNTS FOR ~1 -
+
+2025-12-11 22:50:23,416 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg - PENDING COUNTS FOR ~1 -
+
+2025-12-11 22:50:23,416 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg - PENDING COUNTS FOR ~1 -
+
+2025-12-11 22:50:23,417 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg -
+
+2025-12-11 22:50:23,417 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg -
+
+2025-12-11 22:50:23,417 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg -
+
+2025-12-11 22:50:23,418 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch x ~1 run pendcountaddline scratch msg -
+
+2025-12-11 22:50:23,418 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch x ~1 run pendcountaddline scratch msg -
+
+2025-12-11 22:50:23,418 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch x ~1 run pendcountaddline scratch msg -
+
+2025-12-11 22:50:23,419 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg - CLAIMABLE AT 50% FOR ~1 -
+
+2025-12-11 22:50:23,420 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg - CLAIMABLE AT 50% FOR ~1 -
+
+2025-12-11 22:50:23,420 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg - CLAIMABLE AT 50% FOR ~1 -
+
+2025-12-11 22:50:23,421 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg -
+
+2025-12-11 22:50:23,421 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg -
+
+2025-12-11 22:50:23,421 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg -
+
+2025-12-11 22:50:23,422 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:50:23,422 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:50:23,422 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:50:23,426 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch set TSM DATAONLY no
+
+2025-12-11 22:50:23,426 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch set TSM DATAONLY no
+
+2025-12-11 22:50:23,426 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch set TSM DATAONLY no
+
+2025-12-11 22:50:23,427 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline reado_to_readw x ~ALERT_ENTITY upd vol * whereacc=reado acc=readw
+
+2025-12-11 22:50:23,427 - DEBUG - [fatcontroller.py:1126] - Command is: addline reado_to_readw x ~ALERT_ENTITY upd vol * whereacc=reado acc=readw
+
+2025-12-11 22:50:23,427 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline reado_to_readw x ~ALERT_ENTITY upd vol * whereacc=reado acc=readw
+
+2025-12-11 22:50:23,428 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline updnod x ~1 update node ~2 ~2
+
+2025-12-11 22:50:23,429 - DEBUG - [fatcontroller.py:1126] - Command is: addline updnod x ~1 update node ~2 ~2
+
+2025-12-11 22:50:23,429 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline updnod x ~1 update node ~2 ~2
+
+2025-12-11 22:50:23,430 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline test_pass msg TEST_PASS fired
+
+2025-12-11 22:50:23,430 - DEBUG - [fatcontroller.py:1126] - Command is: addline test_pass msg TEST_PASS fired
+
+2025-12-11 22:50:23,430 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline test_pass msg TEST_PASS fired
+
+2025-12-11 22:50:23,431 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline test_pass msg ~ALERT_ENTITY fired TEST_PASS
+
+2025-12-11 22:50:23,431 - DEBUG - [fatcontroller.py:1126] - Command is: addline test_pass msg ~ALERT_ENTITY fired TEST_PASS
+
+2025-12-11 22:50:23,432 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline test_pass msg ~ALERT_ENTITY fired TEST_PASS
+
+2025-12-11 22:50:23,433 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q se
+
+2025-12-11 22:50:23,433 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q se
+
+2025-12-11 22:50:23,433 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q se
+
+2025-12-11 22:50:23,433 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q mo
+
+2025-12-11 22:50:23,433 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q mo
+
+2025-12-11 22:50:23,433 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q mo
+
+2025-12-11 22:50:23,434 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q dr
+
+2025-12-11 22:50:23,434 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q dr
+
+2025-12-11 22:50:23,434 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q dr
+
+2025-12-11 22:50:23,435 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 ru qdr
+
+2025-12-11 22:50:23,435 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 ru qdr
+
+2025-12-11 22:50:23,435 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 ru qdr
+
+2025-12-11 22:50:23,435 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q pr
+
+2025-12-11 22:50:23,436 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q pr
+
+2025-12-11 22:50:23,436 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q pr
+
+2025-12-11 22:50:23,436 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q db
+
+2025-12-11 22:50:23,437 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q db
+
+2025-12-11 22:50:23,437 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q db
+
+2025-12-11 22:50:23,437 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q log
+
+2025-12-11 22:50:23,437 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q log
+
+2025-12-11 22:50:23,437 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q log
+
+2025-12-11 22:50:23,438 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline volutil x ~1 select volume_name, pct_utilized from volumes where stgpool_name='~2'
+
+2025-12-11 22:50:23,438 - DEBUG - [fatcontroller.py:1126] - Command is: addline volutil x ~1 select volume_name, pct_utilized from volumes where stgpool_name='~2'
+
+2025-12-11 22:50:23,438 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline volutil x ~1 select volume_name, pct_utilized from volumes where stgpool_name='~2'
+
+2025-12-11 22:50:23,440 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline showvrs set TSM DATAONLY yes
+
+2025-12-11 22:50:23,441 - DEBUG - [fatcontroller.py:1126] - Command is: addline showvrs set TSM DATAONLY yes
+
+2025-12-11 22:50:23,441 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline showvrs set TSM DATAONLY yes
+
+2025-12-11 22:50:23,441 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline showvrs x ~1 q drm * wherestate=vaultretrieve
+
+2025-12-11 22:50:23,441 - DEBUG - [fatcontroller.py:1126] - Command is: addline showvrs x ~1 q drm * wherestate=vaultretrieve
+
+2025-12-11 22:50:23,442 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline showvrs x ~1 q drm * wherestate=vaultretrieve
+
+2025-12-11 22:50:23,443 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline showvrs set TSM DATAONLY no
+
+2025-12-11 22:50:23,443 - DEBUG - [fatcontroller.py:1126] - Command is: addline showvrs set TSM DATAONLY no
+
+2025-12-11 22:50:23,443 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline showvrs set TSM DATAONLY no
+
+2025-12-11 22:50:23,443 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline test_fail msg TEST_FAIL fired
+
+2025-12-11 22:50:23,444 - DEBUG - [fatcontroller.py:1126] - Command is: addline test_fail msg TEST_FAIL fired
+
+2025-12-11 22:50:23,444 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline test_fail msg TEST_FAIL fired
+
+2025-12-11 22:50:23,445 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline test_fail msg ~ALERT_ENTITY fired TEST_FAIL
+
+2025-12-11 22:50:23,445 - DEBUG - [fatcontroller.py:1126] - Command is: addline test_fail msg ~ALERT_ENTITY fired TEST_FAIL
+
+2025-12-11 22:50:23,445 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline test_fail msg ~ALERT_ENTITY fired TEST_FAIL
+
+2025-12-11 22:50:23,446 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: set FATCONTROLLER userhome /home/warrenma
+
+2025-12-11 22:50:23,446 - DEBUG - [fatcontroller.py:1126] - Command is: set FATCONTROLLER userhome /home/warrenma
+
+2025-12-11 22:50:23,446 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: set FATCONTROLLER userhome /home/warrenma
+
+2025-12-11 22:50:23,446 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: set FATCONTROLLER VERBOSE yes
+
+2025-12-11 22:50:23,446 - DEBUG - [fatcontroller.py:1126] - Command is: set FATCONTROLLER VERBOSE yes
+
+2025-12-11 22:50:23,447 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: set FATCONTROLLER VERBOSE yes
+
+2025-12-11 22:50:23,447 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: set FATCONTROLLER DEVELOPERPATH c:\\
+
+2025-12-11 22:50:23,447 - DEBUG - [fatcontroller.py:1126] - Command is: set FATCONTROLLER DEVELOPERPATH c:\\
+
+2025-12-11 22:50:23,447 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: set FATCONTROLLER DEVELOPERPATH c:\\
+
+2025-12-11 22:50:23,447 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: set FATCONTROLLER DEVELOPER no
+
+2025-12-11 22:50:23,447 - DEBUG - [fatcontroller.py:1126] - Command is: set FATCONTROLLER DEVELOPER no
+
+2025-12-11 22:50:23,447 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: set FATCONTROLLER DEVELOPER no
+
+2025-12-11 22:50:23,447 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define daemon Every10
+
+2025-12-11 22:50:23,447 - DEBUG - [fatcontroller.py:1126] - Command is: define daemon Every10
+
+2025-12-11 22:50:23,448 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define daemon Every10
+
+2025-12-11 22:50:23,448 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define daemon Every15
+
+2025-12-11 22:50:23,448 - DEBUG - [fatcontroller.py:1126] - Command is: define daemon Every15
+
+2025-12-11 22:50:23,448 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define daemon Every15
+
+2025-12-11 22:50:23,449 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define daemon TwiceDaily
+
+2025-12-11 22:50:23,449 - DEBUG - [fatcontroller.py:1126] - Command is: define daemon TwiceDaily
+
+2025-12-11 22:50:23,449 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define daemon TwiceDaily
+
+2025-12-11 22:50:23,450 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define schedule Every10 1164986415.7 1264986414.7 600
+
+2025-12-11 22:50:23,450 - DEBUG - [fatcontroller.py:1126] - Command is: define schedule Every10 1164986415.7 1264986414.7 600
+
+2025-12-11 22:50:23,450 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define schedule Every10 1164986415.7 1264986414.7 600
+
+2025-12-11 22:50:23,451 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define schedule Every15 1165229023.69 1265229022.69 900
+
+2025-12-11 22:50:23,452 - DEBUG - [fatcontroller.py:1126] - Command is: define schedule Every15 1165229023.69 1265229022.69 900
+
+2025-12-11 22:50:23,452 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define schedule Every15 1165229023.69 1265229022.69 900
+
+2025-12-11 22:50:23,454 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define schedule TwiceDaily 1164983878.75 1264983877.75 43200
+
+2025-12-11 22:50:23,454 - DEBUG - [fatcontroller.py:1126] - Command is: define schedule TwiceDaily 1164983878.75 1264983877.75 43200
+
+2025-12-11 22:50:23,454 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define schedule TwiceDaily 1164983878.75 1264983877.75 43200
+
+2025-12-11 22:50:23,456 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define task Every10 ReadoFromWriteError "select 'tag',count(*) from actlog where msgno=1411 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:50:23,456 - DEBUG - [fatcontroller.py:1126] - Command is: define task Every10 ReadoFromWriteError "select 'tag',count(*) from actlog where msgno=1411 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:50:23,456 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define task Every10 ReadoFromWriteError "select 'tag',count(*) from actlog where msgno=1411 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:50:23,459 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define task Every10 ScratchGonePrivate "select 'tag', count(*) from actlog where msgno=8778 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:50:23,459 - DEBUG - [fatcontroller.py:1126] - Command is: define task Every10 ScratchGonePrivate "select 'tag', count(*) from actlog where msgno=8778 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:50:23,460 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define task Every10 ScratchGonePrivate "select 'tag', count(*) from actlog where msgno=8778 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:50:23,463 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define task Every15 core_diskpool q stg
+
+2025-12-11 22:50:23,463 - DEBUG - [fatcontroller.py:1126] - Command is: define task Every15 core_diskpool q stg
+
+2025-12-11 22:50:23,463 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define task Every15 core_diskpool q stg
+
+2025-12-11 22:50:23,465 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define task Every15 diskpool_usage q stg
+
+2025-12-11 22:50:23,465 - DEBUG - [fatcontroller.py:1126] - Command is: define task Every15 diskpool_usage q stg
+
+2025-12-11 22:50:23,465 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define task Every15 diskpool_usage q stg
+
+2025-12-11 22:50:23,467 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define task TwiceDaily TSM_db "select 'tag',pct_utilized from db"
+
+2025-12-11 22:50:23,467 - DEBUG - [fatcontroller.py:1126] - Command is: define task TwiceDaily TSM_db "select 'tag',pct_utilized from db"
+
+2025-12-11 22:50:23,467 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define task TwiceDaily TSM_db "select 'tag',pct_utilized from db"
+
+2025-12-11 22:50:23,469 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define collector Every10 ReadoFromWriteError Count ^tag 0 ReadoFromWriteError,^2 data/FC_
+
+2025-12-11 22:50:23,469 - DEBUG - [fatcontroller.py:1126] - Command is: define collector Every10 ReadoFromWriteError Count ^tag 0 ReadoFromWriteError,^2 data/FC_
+
+2025-12-11 22:50:23,469 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define collector Every10 ReadoFromWriteError Count ^tag 0 ReadoFromWriteError,^2 data/FC_
+
+2025-12-11 22:50:23,472 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define collector Every10 ScratchGonePrivate Count ^tag 0 ScratchGonePrivate,^2 data/FC_
+
+2025-12-11 22:50:23,473 - DEBUG - [fatcontroller.py:1126] - Command is: define collector Every10 ScratchGonePrivate Count ^tag 0 ScratchGonePrivate,^2 data/FC_
+
+2025-12-11 22:50:23,473 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define collector Every10 ScratchGonePrivate Count ^tag 0 ScratchGonePrivate,^2 data/FC_
+
+2025-12-11 22:50:23,477 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define collector Every15 core_diskpool Check ^DISKPOOL 0 diskpool%,^4 data/FC_
+
+2025-12-11 22:50:23,477 - DEBUG - [fatcontroller.py:1126] - Command is: define collector Every15 core_diskpool Check ^DISKPOOL 0 diskpool%,^4 data/FC_
+
+2025-12-11 22:50:23,477 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define collector Every15 core_diskpool Check ^DISKPOOL 0 diskpool%,^4 data/FC_
+
+2025-12-11 22:50:23,479 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define collector Every15 diskpool_usage Check ^BACKUPPOOL 0 backuppool%,^5 data/FC_
+
+2025-12-11 22:50:23,480 - DEBUG - [fatcontroller.py:1126] - Command is: define collector Every15 diskpool_usage Check ^BACKUPPOOL 0 backuppool%,^5 data/FC_
+
+2025-12-11 22:50:23,480 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define collector Every15 diskpool_usage Check ^BACKUPPOOL 0 backuppool%,^5 data/FC_
+
+2025-12-11 22:50:23,483 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define collector TwiceDaily TSM_db DB%Used ^tag 0 DB%Util,^2 data/FC_
+
+2025-12-11 22:50:23,483 - DEBUG - [fatcontroller.py:1126] - Command is: define collector TwiceDaily TSM_db DB%Used ^tag 0 DB%Util,^2 data/FC_
+
+2025-12-11 22:50:23,483 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define collector TwiceDaily TSM_db DB%Used ^tag 0 DB%Util,^2 data/FC_
+
+2025-12-11 22:50:23,486 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define alert Every10 ReadoFromWriteError Count 0.0 0.0 "WARNING: Tapes have been made Reado due to write error" NoScript reado_to_readw NoScript reado_to_readw
+
+2025-12-11 22:50:23,487 - DEBUG - [fatcontroller.py:1126] - Command is: define alert Every10 ReadoFromWriteError Count 0.0 0.0 "WARNING: Tapes have been made Reado due to write error" NoScript reado_to_readw NoScript reado_to_readw
+
+2025-12-11 22:50:23,487 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define alert Every10 ReadoFromWriteError Count 0.0 0.0 "WARNING: Tapes have been made Reado due to write error" NoScript reado_to_readw NoScript reado_to_readw
+
+2025-12-11 22:50:23,490 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define alert Every10 ScratchGonePrivate Count 0.0 0.0 "WARNING: Scratch tapes have switched to Private status" NoScript NoScript
+
+2025-12-11 22:50:23,491 - DEBUG - [fatcontroller.py:1126] - Command is: define alert Every10 ScratchGonePrivate Count 0.0 0.0 "WARNING: Scratch tapes have switched to Private status" NoScript NoScript
+
+2025-12-11 22:50:23,491 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define alert Every10 ScratchGonePrivate Count 0.0 0.0 "WARNING: Scratch tapes have switched to Private status" NoScript NoScript
+
+2025-12-11 22:50:23,495 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define alert Every15 core_diskpool Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:50:23,495 - DEBUG - [fatcontroller.py:1126] - Command is: define alert Every15 core_diskpool Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:50:23,495 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define alert Every15 core_diskpool Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:50:23,498 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define alert Every15 diskpool_usage Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:50:23,498 - DEBUG - [fatcontroller.py:1126] - Command is: define alert Every15 diskpool_usage Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:50:23,498 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define alert Every15 diskpool_usage Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:50:23,502 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define alert TwiceDaily TSM_db DB%Used 0.0 80.0 "WARNING: DB Utilisation above 80%" NoScript NoScript
+
+2025-12-11 22:50:23,502 - DEBUG - [fatcontroller.py:1126] - Command is: define alert TwiceDaily TSM_db DB%Used 0.0 80.0 "WARNING: DB Utilisation above 80%" NoScript NoScript
+
+2025-12-11 22:50:23,502 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define alert TwiceDaily TSM_db DB%Used 0.0 80.0 "WARNING: DB Utilisation above 80%" NoScript NoScript
+
+2025-12-11 22:50:23,518 - DEBUG - [proactor_events.py:633] - Using proactor: IocpProactor
+2025-12-11 22:53:09,710 - INFO - [fatcontroller.py:163] - Logging initialized. Writing to file: logs.txt
+2025-12-11 22:53:09,723 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: load general
+2025-12-11 22:53:09,723 - DEBUG - [fatcontroller.py:1126] - Command is: load general
+2025-12-11 22:53:09,723 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: load general
+2025-12-11 22:53:09,723 - DEBUG - [fatcontroller.py:1183] - DEBUGMJW: H:/Documents/dev/git_repos/fatcontroler/fatcontroler/general.sav
+2025-12-11 22:53:09,723 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity LOCAL me
+
+2025-12-11 22:53:09,723 - DEBUG - [fatcontroller.py:1126] - Command is: define entity LOCAL me
+
+2025-12-11 22:53:09,724 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity LOCAL me
+
+2025-12-11 22:53:09,725 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity SSH pi1 192.168.1.101 matt matt None
+
+2025-12-11 22:53:09,725 - DEBUG - [fatcontroller.py:1126] - Command is: define entity SSH pi1 192.168.1.101 matt matt None
+
+2025-12-11 22:53:09,725 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity SSH pi1 192.168.1.101 matt matt None
+
+2025-12-11 22:53:09,727 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity SSH pi2 192.168.1.102 matt matt
+
+2025-12-11 22:53:09,727 - DEBUG - [fatcontroller.py:1126] - Command is: define entity SSH pi2 192.168.1.102 matt matt
+
+2025-12-11 22:53:09,727 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity SSH pi2 192.168.1.102 matt matt
+
+2025-12-11 22:53:09,728 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity SSH pi3 192.168.1.103 matt matt
+
+2025-12-11 22:53:09,728 - DEBUG - [fatcontroller.py:1126] - Command is: define entity SSH pi3 192.168.1.103 matt matt
+
+2025-12-11 22:53:09,728 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity SSH pi3 192.168.1.103 matt matt
+
+2025-12-11 22:53:09,730 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity ENTITYGROUP Rpis pi1 pi2 pi3
+
+2025-12-11 22:53:09,730 - DEBUG - [fatcontroller.py:1126] - Command is: define entity ENTITYGROUP Rpis pi1 pi2 pi3
+
+2025-12-11 22:53:09,730 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity ENTITYGROUP Rpis pi1 pi2 pi3
+
+2025-12-11 22:53:09,731 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define entity SSH server 192.168.1.199 matt EggFishPants99DG
+
+2025-12-11 22:53:09,731 - DEBUG - [fatcontroller.py:1126] - Command is: define entity SSH server 192.168.1.199 matt EggFishPants99DG
+
+2025-12-11 22:53:09,732 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define entity SSH server 192.168.1.199 matt EggFishPants99DG
+
+2025-12-11 22:53:09,733 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: alias loadall load general
+
+2025-12-11 22:53:09,733 - DEBUG - [fatcontroller.py:1126] - Command is: alias loadall load general
+
+2025-12-11 22:53:09,733 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: alias loadall load general
+
+2025-12-11 22:53:09,734 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: alias saveall save all general
+
+2025-12-11 22:53:09,734 - DEBUG - [fatcontroller.py:1126] - Command is: alias saveall save all general
+
+2025-12-11 22:53:09,734 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: alias saveall save all general
+
+2025-12-11 22:53:09,735 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute pendingdates select pending_date from volumes where status='PENDING' order by pending_date
+
+2025-12-11 22:53:09,735 - DEBUG - [fatcontroller.py:1126] - Command is: substitute pendingdates select pending_date from volumes where status='PENDING' order by pending_date
+
+2025-12-11 22:53:09,735 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute pendingdates select pending_date from volumes where status='PENDING' order by pending_date
+
+2025-12-11 22:53:09,736 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute xn x nsk
+
+2025-12-11 22:53:09,736 - DEBUG - [fatcontroller.py:1126] - Command is: substitute xn x nsk
+
+2025-12-11 22:53:09,736 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute xn x nsk
+
+2025-12-11 22:53:09,737 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute claimable "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:53:09,737 - DEBUG - [fatcontroller.py:1126] - Command is: substitute claimable "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:53:09,737 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute claimable "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:53:09,738 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute xm x mustoUnix
+
+2025-12-11 22:53:09,738 - DEBUG - [fatcontroller.py:1126] - Command is: substitute xm x mustoUnix
+
+2025-12-11 22:53:09,738 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute xm x mustoUnix
+
+2025-12-11 22:53:09,739 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute scratch "select mediatype,count(*) from libvolumes where status='Scratch' group by mediatype"
+
+2025-12-11 22:53:09,739 - DEBUG - [fatcontroller.py:1126] - Command is: substitute scratch "select mediatype,count(*) from libvolumes where status='Scratch' group by mediatype"
+
+2025-12-11 22:53:09,739 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute scratch "select mediatype,count(*) from libvolumes where status='Scratch' group by mediatype"
+
+2025-12-11 22:53:09,739 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute al addline
+
+2025-12-11 22:53:09,740 - DEBUG - [fatcontroller.py:1126] - Command is: substitute al addline
+
+2025-12-11 22:53:09,740 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute al addline
+
+2025-12-11 22:53:09,740 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute xc x core
+
+2025-12-11 22:53:09,740 - DEBUG - [fatcontroller.py:1126] - Command is: substitute xc x core
+
+2025-12-11 22:53:09,740 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute xc x core
+
+2025-12-11 22:53:09,741 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute xr x rcl
+
+2025-12-11 22:53:09,742 - DEBUG - [fatcontroller.py:1126] - Command is: substitute xr x rcl
+
+2025-12-11 22:53:09,742 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute xr x rcl
+
+2025-12-11 22:53:09,743 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: substitute retentions select domain_name,set_name,class_name,verexists,verdeleted,retextra,retonly from bu_copygroups
+
+2025-12-11 22:53:09,743 - DEBUG - [fatcontroller.py:1126] - Command is: substitute retentions select domain_name,set_name,class_name,verexists,verdeleted,retextra,retonly from bu_copygroups
+
+2025-12-11 22:53:09,743 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: substitute retentions select domain_name,set_name,class_name,verexists,verdeleted,retextra,retonly from bu_copygroups
+
+2025-12-11 22:53:09,744 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline claimable x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=~2) group by mediatype"
+
+2025-12-11 22:53:09,744 - DEBUG - [fatcontroller.py:1126] - Command is: addline claimable x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=~2) group by mediatype"
+
+2025-12-11 22:53:09,744 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline claimable x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=~2) group by mediatype"
+
+2025-12-11 22:53:09,747 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch set TSM DATAONLY yes
+
+2025-12-11 22:53:09,747 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch set TSM DATAONLY yes
+
+2025-12-11 22:53:09,747 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch set TSM DATAONLY yes
+
+2025-12-11 22:53:09,748 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg -
+
+2025-12-11 22:53:09,749 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg -
+
+2025-12-11 22:53:09,749 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg -
+
+2025-12-11 22:53:09,749 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg - SCRATCH REPORT FOR ~1 -
+
+2025-12-11 22:53:09,749 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg - SCRATCH REPORT FOR ~1 -
+
+2025-12-11 22:53:09,750 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg - SCRATCH REPORT FOR ~1 -
+
+2025-12-11 22:53:09,751 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg -
+
+2025-12-11 22:53:09,751 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg -
+
+2025-12-11 22:53:09,751 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg -
+
+2025-12-11 22:53:09,752 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch x ~1 select mediatype,count\(\*\) from libvolumes where status=\'Scratch\' group by mediatype
+
+2025-12-11 22:53:09,752 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch x ~1 select mediatype,count\(\*\) from libvolumes where status=\'Scratch\' group by mediatype
+
+2025-12-11 22:53:09,752 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch x ~1 select mediatype,count\(\*\) from libvolumes where status=\'Scratch\' group by mediatype
+
+2025-12-11 22:53:09,754 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg -
+
+2025-12-11 22:53:09,754 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg -
+
+2025-12-11 22:53:09,754 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg -
+
+2025-12-11 22:53:09,755 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg - PENDING COUNTS FOR ~1 -
+
+2025-12-11 22:53:09,755 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg - PENDING COUNTS FOR ~1 -
+
+2025-12-11 22:53:09,755 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg - PENDING COUNTS FOR ~1 -
+
+2025-12-11 22:53:09,756 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg -
+
+2025-12-11 22:53:09,756 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg -
+
+2025-12-11 22:53:09,756 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg -
+
+2025-12-11 22:53:09,757 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch x ~1 run pendcountaddline scratch msg -
+
+2025-12-11 22:53:09,757 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch x ~1 run pendcountaddline scratch msg -
+
+2025-12-11 22:53:09,757 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch x ~1 run pendcountaddline scratch msg -
+
+2025-12-11 22:53:09,758 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg - CLAIMABLE AT 50% FOR ~1 -
+
+2025-12-11 22:53:09,758 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg - CLAIMABLE AT 50% FOR ~1 -
+
+2025-12-11 22:53:09,758 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg - CLAIMABLE AT 50% FOR ~1 -
+
+2025-12-11 22:53:09,759 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch msg -
+
+2025-12-11 22:53:09,759 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch msg -
+
+2025-12-11 22:53:09,759 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch msg -
+
+2025-12-11 22:53:09,760 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:53:09,760 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:53:09,760 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch x ~1 "select mediatype,count(*) as Reclaimable from libvolumes where volume_name in (select volume_name from volumes where pct_reclaim>=50) group by mediatype"
+
+2025-12-11 22:53:09,764 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline scratch set TSM DATAONLY no
+
+2025-12-11 22:53:09,764 - DEBUG - [fatcontroller.py:1126] - Command is: addline scratch set TSM DATAONLY no
+
+2025-12-11 22:53:09,764 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline scratch set TSM DATAONLY no
+
+2025-12-11 22:53:09,765 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline reado_to_readw x ~ALERT_ENTITY upd vol * whereacc=reado acc=readw
+
+2025-12-11 22:53:09,765 - DEBUG - [fatcontroller.py:1126] - Command is: addline reado_to_readw x ~ALERT_ENTITY upd vol * whereacc=reado acc=readw
+
+2025-12-11 22:53:09,765 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline reado_to_readw x ~ALERT_ENTITY upd vol * whereacc=reado acc=readw
+
+2025-12-11 22:53:09,766 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline updnod x ~1 update node ~2 ~2
+
+2025-12-11 22:53:09,766 - DEBUG - [fatcontroller.py:1126] - Command is: addline updnod x ~1 update node ~2 ~2
+
+2025-12-11 22:53:09,766 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline updnod x ~1 update node ~2 ~2
+
+2025-12-11 22:53:09,767 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline test_pass msg TEST_PASS fired
+
+2025-12-11 22:53:09,768 - DEBUG - [fatcontroller.py:1126] - Command is: addline test_pass msg TEST_PASS fired
+
+2025-12-11 22:53:09,768 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline test_pass msg TEST_PASS fired
+
+2025-12-11 22:53:09,768 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline test_pass msg ~ALERT_ENTITY fired TEST_PASS
+
+2025-12-11 22:53:09,769 - DEBUG - [fatcontroller.py:1126] - Command is: addline test_pass msg ~ALERT_ENTITY fired TEST_PASS
+
+2025-12-11 22:53:09,769 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline test_pass msg ~ALERT_ENTITY fired TEST_PASS
+
+2025-12-11 22:53:09,770 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q se
+
+2025-12-11 22:53:09,770 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q se
+
+2025-12-11 22:53:09,770 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q se
+
+2025-12-11 22:53:09,770 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q mo
+
+2025-12-11 22:53:09,771 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q mo
+
+2025-12-11 22:53:09,771 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q mo
+
+2025-12-11 22:53:09,771 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q dr
+
+2025-12-11 22:53:09,771 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q dr
+
+2025-12-11 22:53:09,771 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q dr
+
+2025-12-11 22:53:09,772 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 ru qdr
+
+2025-12-11 22:53:09,772 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 ru qdr
+
+2025-12-11 22:53:09,772 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 ru qdr
+
+2025-12-11 22:53:09,773 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q pr
+
+2025-12-11 22:53:09,773 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q pr
+
+2025-12-11 22:53:09,773 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q pr
+
+2025-12-11 22:53:09,774 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q db
+
+2025-12-11 22:53:09,774 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q db
+
+2025-12-11 22:53:09,774 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q db
+
+2025-12-11 22:53:09,774 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline overview x ~1 q log
+
+2025-12-11 22:53:09,775 - DEBUG - [fatcontroller.py:1126] - Command is: addline overview x ~1 q log
+
+2025-12-11 22:53:09,775 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline overview x ~1 q log
+
+2025-12-11 22:53:09,776 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline volutil x ~1 select volume_name, pct_utilized from volumes where stgpool_name='~2'
+
+2025-12-11 22:53:09,776 - DEBUG - [fatcontroller.py:1126] - Command is: addline volutil x ~1 select volume_name, pct_utilized from volumes where stgpool_name='~2'
+
+2025-12-11 22:53:09,776 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline volutil x ~1 select volume_name, pct_utilized from volumes where stgpool_name='~2'
+
+2025-12-11 22:53:09,778 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline showvrs set TSM DATAONLY yes
+
+2025-12-11 22:53:09,778 - DEBUG - [fatcontroller.py:1126] - Command is: addline showvrs set TSM DATAONLY yes
+
+2025-12-11 22:53:09,778 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline showvrs set TSM DATAONLY yes
+
+2025-12-11 22:53:09,778 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline showvrs x ~1 q drm * wherestate=vaultretrieve
+
+2025-12-11 22:53:09,779 - DEBUG - [fatcontroller.py:1126] - Command is: addline showvrs x ~1 q drm * wherestate=vaultretrieve
+
+2025-12-11 22:53:09,779 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline showvrs x ~1 q drm * wherestate=vaultretrieve
+
+2025-12-11 22:53:09,780 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline showvrs set TSM DATAONLY no
+
+2025-12-11 22:53:09,780 - DEBUG - [fatcontroller.py:1126] - Command is: addline showvrs set TSM DATAONLY no
+
+2025-12-11 22:53:09,780 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline showvrs set TSM DATAONLY no
+
+2025-12-11 22:53:09,781 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline test_fail msg TEST_FAIL fired
+
+2025-12-11 22:53:09,781 - DEBUG - [fatcontroller.py:1126] - Command is: addline test_fail msg TEST_FAIL fired
+
+2025-12-11 22:53:09,781 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline test_fail msg TEST_FAIL fired
+
+2025-12-11 22:53:09,782 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: addline test_fail msg ~ALERT_ENTITY fired TEST_FAIL
+
+2025-12-11 22:53:09,782 - DEBUG - [fatcontroller.py:1126] - Command is: addline test_fail msg ~ALERT_ENTITY fired TEST_FAIL
+
+2025-12-11 22:53:09,782 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: addline test_fail msg ~ALERT_ENTITY fired TEST_FAIL
+
+2025-12-11 22:53:09,783 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: set FATCONTROLLER userhome /home/warrenma
+
+2025-12-11 22:53:09,783 - DEBUG - [fatcontroller.py:1126] - Command is: set FATCONTROLLER userhome /home/warrenma
+
+2025-12-11 22:53:09,783 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: set FATCONTROLLER userhome /home/warrenma
+
+2025-12-11 22:53:09,784 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: set FATCONTROLLER VERBOSE yes
+
+2025-12-11 22:53:09,784 - DEBUG - [fatcontroller.py:1126] - Command is: set FATCONTROLLER VERBOSE yes
+
+2025-12-11 22:53:09,784 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: set FATCONTROLLER VERBOSE yes
+
+2025-12-11 22:53:09,784 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: set FATCONTROLLER DEVELOPERPATH c:\\
+
+2025-12-11 22:53:09,784 - DEBUG - [fatcontroller.py:1126] - Command is: set FATCONTROLLER DEVELOPERPATH c:\\
+
+2025-12-11 22:53:09,784 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: set FATCONTROLLER DEVELOPERPATH c:\\
+
+2025-12-11 22:53:09,784 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: set FATCONTROLLER DEVELOPER no
+
+2025-12-11 22:53:09,784 - DEBUG - [fatcontroller.py:1126] - Command is: set FATCONTROLLER DEVELOPER no
+
+2025-12-11 22:53:09,785 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: set FATCONTROLLER DEVELOPER no
+
+2025-12-11 22:53:09,785 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define daemon Every10
+
+2025-12-11 22:53:09,785 - DEBUG - [fatcontroller.py:1126] - Command is: define daemon Every10
+
+2025-12-11 22:53:09,785 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define daemon Every10
+
+2025-12-11 22:53:09,786 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define daemon Every15
+
+2025-12-11 22:53:09,786 - DEBUG - [fatcontroller.py:1126] - Command is: define daemon Every15
+
+2025-12-11 22:53:09,786 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define daemon Every15
+
+2025-12-11 22:53:09,786 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define daemon TwiceDaily
+
+2025-12-11 22:53:09,786 - DEBUG - [fatcontroller.py:1126] - Command is: define daemon TwiceDaily
+
+2025-12-11 22:53:09,787 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define daemon TwiceDaily
+
+2025-12-11 22:53:09,787 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define schedule Every10 1164986415.7 1264986414.7 600
+
+2025-12-11 22:53:09,787 - DEBUG - [fatcontroller.py:1126] - Command is: define schedule Every10 1164986415.7 1264986414.7 600
+
+2025-12-11 22:53:09,787 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define schedule Every10 1164986415.7 1264986414.7 600
+
+2025-12-11 22:53:09,789 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define schedule Every15 1165229023.69 1265229022.69 900
+
+2025-12-11 22:53:09,789 - DEBUG - [fatcontroller.py:1126] - Command is: define schedule Every15 1165229023.69 1265229022.69 900
+
+2025-12-11 22:53:09,789 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define schedule Every15 1165229023.69 1265229022.69 900
+
+2025-12-11 22:53:09,791 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define schedule TwiceDaily 1164983878.75 1264983877.75 43200
+
+2025-12-11 22:53:09,792 - DEBUG - [fatcontroller.py:1126] - Command is: define schedule TwiceDaily 1164983878.75 1264983877.75 43200
+
+2025-12-11 22:53:09,792 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define schedule TwiceDaily 1164983878.75 1264983877.75 43200
+
+2025-12-11 22:53:09,794 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define task Every10 ReadoFromWriteError "select 'tag',count(*) from actlog where msgno=1411 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:53:09,794 - DEBUG - [fatcontroller.py:1126] - Command is: define task Every10 ReadoFromWriteError "select 'tag',count(*) from actlog where msgno=1411 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:53:09,794 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define task Every10 ReadoFromWriteError "select 'tag',count(*) from actlog where msgno=1411 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:53:09,797 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define task Every10 ScratchGonePrivate "select 'tag', count(*) from actlog where msgno=8778 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:53:09,797 - DEBUG - [fatcontroller.py:1126] - Command is: define task Every10 ScratchGonePrivate "select 'tag', count(*) from actlog where msgno=8778 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:53:09,797 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define task Every10 ScratchGonePrivate "select 'tag', count(*) from actlog where msgno=8778 and current_timestamp-date_time<10 minutes"
+
+2025-12-11 22:53:09,801 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define task Every15 core_diskpool q stg
+
+2025-12-11 22:53:09,801 - DEBUG - [fatcontroller.py:1126] - Command is: define task Every15 core_diskpool q stg
+
+2025-12-11 22:53:09,801 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define task Every15 core_diskpool q stg
+
+2025-12-11 22:53:09,802 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define task Every15 diskpool_usage q stg
+
+2025-12-11 22:53:09,802 - DEBUG - [fatcontroller.py:1126] - Command is: define task Every15 diskpool_usage q stg
+
+2025-12-11 22:53:09,802 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define task Every15 diskpool_usage q stg
+
+2025-12-11 22:53:09,804 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define task TwiceDaily TSM_db "select 'tag',pct_utilized from db"
+
+2025-12-11 22:53:09,804 - DEBUG - [fatcontroller.py:1126] - Command is: define task TwiceDaily TSM_db "select 'tag',pct_utilized from db"
+
+2025-12-11 22:53:09,804 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define task TwiceDaily TSM_db "select 'tag',pct_utilized from db"
+
+2025-12-11 22:53:09,805 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define collector Every10 ReadoFromWriteError Count ^tag 0 ReadoFromWriteError,^2 data/FC_
+
+2025-12-11 22:53:09,805 - DEBUG - [fatcontroller.py:1126] - Command is: define collector Every10 ReadoFromWriteError Count ^tag 0 ReadoFromWriteError,^2 data/FC_
+
+2025-12-11 22:53:09,806 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define collector Every10 ReadoFromWriteError Count ^tag 0 ReadoFromWriteError,^2 data/FC_
+
+2025-12-11 22:53:09,808 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define collector Every10 ScratchGonePrivate Count ^tag 0 ScratchGonePrivate,^2 data/FC_
+
+2025-12-11 22:53:09,808 - DEBUG - [fatcontroller.py:1126] - Command is: define collector Every10 ScratchGonePrivate Count ^tag 0 ScratchGonePrivate,^2 data/FC_
+
+2025-12-11 22:53:09,809 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define collector Every10 ScratchGonePrivate Count ^tag 0 ScratchGonePrivate,^2 data/FC_
+
+2025-12-11 22:53:09,812 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define collector Every15 core_diskpool Check ^DISKPOOL 0 diskpool%,^4 data/FC_
+
+2025-12-11 22:53:09,813 - DEBUG - [fatcontroller.py:1126] - Command is: define collector Every15 core_diskpool Check ^DISKPOOL 0 diskpool%,^4 data/FC_
+
+2025-12-11 22:53:09,813 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define collector Every15 core_diskpool Check ^DISKPOOL 0 diskpool%,^4 data/FC_
+
+2025-12-11 22:53:09,815 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define collector Every15 diskpool_usage Check ^BACKUPPOOL 0 backuppool%,^5 data/FC_
+
+2025-12-11 22:53:09,815 - DEBUG - [fatcontroller.py:1126] - Command is: define collector Every15 diskpool_usage Check ^BACKUPPOOL 0 backuppool%,^5 data/FC_
+
+2025-12-11 22:53:09,815 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define collector Every15 diskpool_usage Check ^BACKUPPOOL 0 backuppool%,^5 data/FC_
+
+2025-12-11 22:53:09,819 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define collector TwiceDaily TSM_db DB%Used ^tag 0 DB%Util,^2 data/FC_
+
+2025-12-11 22:53:09,819 - DEBUG - [fatcontroller.py:1126] - Command is: define collector TwiceDaily TSM_db DB%Used ^tag 0 DB%Util,^2 data/FC_
+
+2025-12-11 22:53:09,819 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define collector TwiceDaily TSM_db DB%Used ^tag 0 DB%Util,^2 data/FC_
+
+2025-12-11 22:53:09,821 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define alert Every10 ReadoFromWriteError Count 0.0 0.0 "WARNING: Tapes have been made Reado due to write error" NoScript reado_to_readw NoScript reado_to_readw
+
+2025-12-11 22:53:09,821 - DEBUG - [fatcontroller.py:1126] - Command is: define alert Every10 ReadoFromWriteError Count 0.0 0.0 "WARNING: Tapes have been made Reado due to write error" NoScript reado_to_readw NoScript reado_to_readw
+
+2025-12-11 22:53:09,822 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define alert Every10 ReadoFromWriteError Count 0.0 0.0 "WARNING: Tapes have been made Reado due to write error" NoScript reado_to_readw NoScript reado_to_readw
+
+2025-12-11 22:53:09,826 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define alert Every10 ScratchGonePrivate Count 0.0 0.0 "WARNING: Scratch tapes have switched to Private status" NoScript NoScript
+
+2025-12-11 22:53:09,826 - DEBUG - [fatcontroller.py:1126] - Command is: define alert Every10 ScratchGonePrivate Count 0.0 0.0 "WARNING: Scratch tapes have switched to Private status" NoScript NoScript
+
+2025-12-11 22:53:09,826 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define alert Every10 ScratchGonePrivate Count 0.0 0.0 "WARNING: Scratch tapes have switched to Private status" NoScript NoScript
+
+2025-12-11 22:53:09,829 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define alert Every15 core_diskpool Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:53:09,829 - DEBUG - [fatcontroller.py:1126] - Command is: define alert Every15 core_diskpool Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:53:09,830 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define alert Every15 core_diskpool Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:53:09,833 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define alert Every15 diskpool_usage Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:53:09,833 - DEBUG - [fatcontroller.py:1126] - Command is: define alert Every15 diskpool_usage Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:53:09,833 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define alert Every15 diskpool_usage Check 0.0 75.0 "WARNING! Diskpool is filling up!" NoScript NoScript
+
+2025-12-11 22:53:09,836 - DEBUG - [fatcontroller.py:637] - [processcommand] Before Substitution: define alert TwiceDaily TSM_db DB%Used 0.0 80.0 "WARNING: DB Utilisation above 80%" NoScript NoScript
+
+2025-12-11 22:53:09,837 - DEBUG - [fatcontroller.py:1126] - Command is: define alert TwiceDaily TSM_db DB%Used 0.0 80.0 "WARNING: DB Utilisation above 80%" NoScript NoScript
+
+2025-12-11 22:53:09,837 - DEBUG - [fatcontroller.py:637] - [processcommand] After Substitution: define alert TwiceDaily TSM_db DB%Used 0.0 80.0 "WARNING: DB Utilisation above 80%" NoScript NoScript
+
+2025-12-11 22:53:09,852 - DEBUG - [proactor_events.py:633] - Using proactor: IocpProactor

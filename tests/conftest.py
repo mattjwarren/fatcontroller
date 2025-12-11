@@ -76,9 +76,36 @@ def mock_tkinter(monkeypatch):
     monkeypatch.setitem(sys.modules, 'tkinter.ttk', mock_ttk)
     monkeypatch.setitem(sys.modules, 'ttk', mock_ttk)
     
+    
     # Mock ttkbootstrap
     mock_ttkbootstrap = types.ModuleType('ttkbootstrap')
-    mock_ttkbootstrap.Window = MockTk
+    
+    # Create a mock Window class that doesn't try to create real Tk instances
+    class MockWindow:
+        def __init__(self, *args, **kwargs):
+            # Don't call super().__init__() which would try to create real Tk
+            self.master = None
+            self.children = {}
+            self._tkloaded = False
+            self.tk = MagicMock()
+            pass
+        def geometry(self, *args): pass
+        def title(self, *args): pass
+        def mainloop(self): pass
+        def pack(self, *args, **kwargs): pass
+        def add(self, *args, **kwargs): pass
+        def protocol(self, *args, **kwargs): pass
+        def destroy(self): pass
+        def after(self, *args, **kwargs): pass
+        def winfo_children(self): return []
+        def nametowidget(self, name): return MagicMock()
+        def select(self, *args): pass
+        def forget(self, *args): pass
+        def tab(self, *args, **kwargs): return ""
+        def index(self, *args): return 0
+        
+    mock_ttkbootstrap.Window = MockWindow
+    
     for w in ['Frame', 'Label', 'Entry', 'Button', 'Panedwindow', 'Notebook', 'Combobox', 'Scrollbar']:
         setattr(mock_ttkbootstrap, w, MockWidgetFactory)
     
@@ -104,17 +131,33 @@ def mock_tkinter(monkeypatch):
     mock_cp.CommandParser.return_value = mock_cp_instance
     monkeypatch.setitem(sys.modules, 'FC_command_parser', mock_cp)
 
+
 @pytest.fixture
 def app(mock_tkinter, monkeypatch):
     """
     Create a FatController instance for testing.
     """
+    # CRITICAL: Patch ttkbootstrap.Window.__init__ BEFORE importing FatController
+    # This prevents the real Tk instance creation
+    import ttkbootstrap
+    
+    original_window_init = ttkbootstrap.Window.__init__
+    
+    def mock_window_init(self, *args, **kwargs):
+        # Don't call the original __init__, just set required attributes
+        self.master = None
+        self.children = {}
+        self._tkloaded = False
+        self.tk = MagicMock()
+        # Add any other attributes that FatController might need
+        pass
+    
+    monkeypatch.setattr(ttkbootstrap.Window, '__init__', mock_window_init)
+    
+    # NOW import FatController after patching
     import FatController
     
     # Mock methods that might interfere or are slow
-    # Mock methods that might interfere or are slow
-    # We mock the ThreadedScheduler class itself to return a mock
-    # Use monkeypatch to ensure it's undone after the test
     if hasattr(FatController, 'FC_ThreadedScheduler'):
         monkeypatch.setattr(FatController.FC_ThreadedScheduler, 'ThreadedScheduler', MagicMock())
     
@@ -131,3 +174,4 @@ def app(mock_tkinter, monkeypatch):
              app.FCScheduler.stop()
          except:
              pass
+

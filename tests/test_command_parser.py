@@ -70,3 +70,33 @@ class TestCommandParser:
         assert matched is True
         assert executed is True
         parser.app.do_something.assert_called_with('test')
+
+    def test_match_and_execute_define_entity(self, parser):
+        # Replica of: define entity input:not(self.EntityManager.isEntity('<<')) input:'<<'!='' +* create:self.EntityManager.define(SplitCmd[2],SplitCmd[3:])
+        # Simplified matcher for test logic (skipping complicated 'not(isEntity)' which is unit tested in validate)
+        cmd_def = {
+            'matchers': [
+                {'type': 'literal', 'value': 'define'},
+                {'type': 'literal', 'value': 'entity'},
+                # Input 1: Entity Type
+                {'type': 'input', 'expr': "'<<'!=''"}, 
+                # Input 2: Entity Name
+                {'type': 'input', 'expr': "'<<'!=''"},
+                # Rest: Params
+                {'type': 'wildcard'},
+                {'type': 'create', 'expr': "self.EntityManager.define(SplitCmd[2],SplitCmd[3:])"}
+            ]
+        }
+        
+        parser.app.EntityManager = MagicMock()
+        
+        cmd = ['define', 'entity', 'SSH', 'pi1', '192.168.1.101', 'user', 'pass']
+        matched, executed = parser.match_and_execute(cmd_def, cmd)
+        
+        assert matched is True
+        assert executed is True
+        
+        # Verify call args
+        # SplitCmd indexes: 0=define, 1=entity, 2=SSH, 3=pi1, 4=IP...
+        # define(SplitCmd[2], SplitCmd[3:]) -> define('SSH', ['pi1', '192.168.1.101', ...])
+        parser.app.EntityManager.define.assert_called_with('SSH', ['pi1', '192.168.1.101', 'user', 'pass'])
