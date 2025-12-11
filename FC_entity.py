@@ -12,12 +12,20 @@ class entity:
     def __init__(self):
         pass
 
-    async def execute(self,CmdList):
+    async def execute(self,CmdList, trace_id=None):
         '''Generic method.
 
         CmdList should be parsed and executed against the given entity (self).
         The return value should be a list of output elements readable by
-        entity.display()'''    
+        entity.display()'''
+        import logging
+        import uuid
+        
+        if trace_id is None:
+            trace_id = str(uuid.uuid4())[:8]
+            
+        logging.debug(f"[{trace_id}] Entity.execute called for {self.getname()} with command {CmdList}")
+        
         return # List of lines readable by display() method
 
     def getparameterdefs(self):

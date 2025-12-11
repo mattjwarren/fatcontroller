@@ -105,17 +105,18 @@ def mock_tkinter(monkeypatch):
     monkeypatch.setitem(sys.modules, 'FC_command_parser', mock_cp)
 
 @pytest.fixture
-def app(mock_tkinter):
+def app(mock_tkinter, monkeypatch):
     """
     Create a FatController instance for testing.
     """
     import FatController
     
     # Mock methods that might interfere or are slow
+    # Mock methods that might interfere or are slow
     # We mock the ThreadedScheduler class itself to return a mock
-    if isinstance(FatController.FC_ThreadedScheduler.ThreadedScheduler, type):
-        original_scheduler = FatController.FC_ThreadedScheduler.ThreadedScheduler
-        FatController.FC_ThreadedScheduler.ThreadedScheduler = MagicMock()
+    # Use monkeypatch to ensure it's undone after the test
+    if hasattr(FatController, 'FC_ThreadedScheduler'):
+        monkeypatch.setattr(FatController.FC_ThreadedScheduler, 'ThreadedScheduler', MagicMock())
     
     app = FatController.FatController()
     

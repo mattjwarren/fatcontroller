@@ -17,8 +17,17 @@ class ENTITYGROUP(FC_entity.entity):
 
     Opts={}
 
-    async def execute(self,CmdList):
+    async def execute(self,CmdList, trace_id=None):
         import asyncio
+        import logging
+        import uuid
+        
+        if trace_id is None:
+             trace_id = str(uuid.uuid4())[:8]
+             logging.debug(f"[{trace_id}] ENTITYGROUP.execute initiated for group {self.Name} (new trace)")
+        else:
+             logging.debug(f"[{trace_id}] ENTITYGROUP.execute starting for group {self.Name}")
+             
         OutputList=[]
         OutputList.append('Executing command against group '+self.Name)
         
@@ -30,12 +39,13 @@ class ENTITYGROUP(FC_entity.entity):
         for entity in self.Entities:
             # We call the EntityManager.execute, which handles UI and calling entity.execute
             # Wait, EntityManager.execute is now async too.
-            tasks.append(self.EntityManager.execute(entity, CmdList))
+            tasks.append(self.EntityManager.execute(entity, CmdList, trace_id=trace_id))
             
         if tasks:
              await asyncio.gather(*tasks)
              
         OutputList.append('Group execution initiated.')
+        logging.debug(f"[{trace_id}] ENTITYGROUP.execute finished for group {self.Name}")
         return OutputList
 
     def display(self,LineList,OutputCtrl):

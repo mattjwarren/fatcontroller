@@ -15,7 +15,7 @@ class DUMB(FC_entity.entity):
 
     Opts={} #for holding settable entity options
 
-    async def execute(self,CmdList):
+    async def execute(self, CmdList, trace_id=None):
         import asyncio
         OutputList=[]
         OutputList.append('I would have executed this')

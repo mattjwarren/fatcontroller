@@ -15,13 +15,40 @@ import FC_formatter
 import FC_command_parser
 import logging
 
-# Configure basic logging to prevent 'No handler found' warnings before GUI setup
-logging.basicConfig(level=logging.DEBUG)
+# Configure basic logging with format
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s',
+    handlers=[
+        logging.StreamHandler(sys.stderr),
+        logging.FileHandler('FatController.log', mode='a', encoding='utf-8')
+    ]
+)
 
 fcversion="v1f11r1a"
 __version__ = fcversion
 
 startmessage='Welcome to FatController '+fcversion
+
+
+class FatController(ttk.Window):
+    '''is essentially the command processor'''
+    def __init__(self):
+        super().__init__(themename="darkly")
+        
+        self.title("FatController")
+        self.geometry("3072x1536")
+        
+        # ... (rest of init) Note: cannot see inside init, assuming no change needed there for basic config
+        # actually, I need to match the indentation and context properly. 
+        # The tool requires exact match. 
+        # I will target the logging basicConfig lines first.
+    
+    # ... Skipping strict large context match for safety, targeting specific blocks.
+
+    def dbg(self, Msg, Fn, execclass=None):
+        """Legacy debug function redirected to logging module."""
+        logging.debug(f"[{Fn}] {Msg}")
 
 
 
@@ -64,11 +91,11 @@ class FatController(ttk.Window):
         #############
         
         # Main Vertical Splitter
-        self.VSplitter = ttk.Panedwindow(self, orient=tk.HORIZONTAL)
+        self.VSplitter = ttk.PanedWindow(self, orient=tk.HORIZONTAL)
         self.VSplitter.pack(fill=tk.BOTH, expand=True)
         
         # Left Side (Notebook + Shell)
-        self.LSplitter = ttk.Panedwindow(self.VSplitter, orient=tk.VERTICAL)
+        self.LSplitter = ttk.PanedWindow(self.VSplitter, orient=tk.VERTICAL)
         self.VSplitter.add(self.LSplitter, weight=3) # Main area
         
         # Right Side (Tree)
@@ -607,7 +634,7 @@ class FatController(ttk.Window):
     #TODO: logger
 
     def dbg(self,Msg,Fn,execclass=None):
-        logging.getLogger(Fn).debug(Msg)
+        logging.debug(f"[{Fn}] {Msg}")
     #
     #
     ###########

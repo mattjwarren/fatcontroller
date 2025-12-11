@@ -12,9 +12,14 @@ class LOCAL(FC_entity.entity):
 
     Opts={}
 
-    async def execute(self,CmdList):
+    async def execute(self,CmdList, trace_id=None):
         import asyncio
         import shlex
+        import logging
+        
+        log_prefix = f"[{trace_id}]" if trace_id else ""
+        logging.debug(f"{log_prefix} LOCAL.execute: {' '.join(CmdList)}")
+        
         # din,dout,derr=os.popen3(' '.join(CmdList))
         try:
             cmd = ' '.join(CmdList)

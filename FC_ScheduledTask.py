@@ -14,12 +14,16 @@
 # http://webware.sourceforge.net/Webware-0.7/TaskKit/Docs/QuickStart.html
 #
 import threading
+import logging
+import uuid
+import inspect
+
 class ScheduledTask(threading.Thread):
 
     def __init__(self):
         threading.Thread.__init__(self)
         ''' Subclasses should invoke super for this method. '''
-        # Nothing for now, but we might do something in the future.
+        self.current_trace_id = None
         pass
 
     def run(self):
@@ -67,39 +71,25 @@ class ScheduledTask(threading.Thread):
         This is the actual run method for the Task thread. It is a private method which
         should not be overriden.
         '''
-        DBGBN='scheduledtask_run'
-        #dbg('Entering ...',DBGBN)
+        self.current_trace_id = str(uuid.uuid4())[:8] # Short trace ID
+        log_prefix = f"[{self.current_trace_id}]"
+        
+        logging.debug(f"{log_prefix} ScheduledTask _run starting for {handle.name()}")
+        
         self._name = handle.name()
         self._handle = handle
-        #dbg('handing over to self.run()',DBGBN)
         
-        # If run is async, await it. If it's sync (legacy tasks), run it?
-        # We enforced FC_daemon.run to be async.
-        # But other tasks might exist? 
-        # Checking codebase... Only FC_daemon seems to be the main implementer.
-        # It's safer to await it. If it's not a coroutine, this will raise error.
-        # We assume all ScheduledTasks are updated to async or wrapped.
-        
-        # If self.run is regular func, await will fail.
-        # But we updated FC_daemon to async. 
-        # Let's check with inspect or try/except?
-        # For this migration we assume migration is complete for main usage.
-        
-        import inspect
-        if inspect.iscoroutinefunction(self.run):
-             await self.run(self) # FC_daemon.run takes 'adaemon' argument which is self.
-        else:
-             self.run() # synchronus fallback? But this runs in async loop thread now!
+        try:
+            if inspect.iscoroutinefunction(self.run):
+                 await self.run(self) # FC_daemon.run takes 'adaemon' argument which is self.
+            else:
+                 logging.warning(f"{log_prefix} Executing synchronous run method in async loop!")
+                 self.run() 
+        except Exception as e:
+            logging.error(f"{log_prefix} Error in ScheduledTask _run: {e}", exc_info=True)
              
-        #dbg('Now going to notify completion',DBGBN)
-        handle.notifyCompletion() # This creates a thread safety issue? 
-        # notifyCompletion modifies scheduler structures.
-        # Scheduler is running in its own thread.
-        # We are modifying shared state from async loop thread (if different).
-        # Scheduler's run loop locks? No locks seen.
-        # This is a race condition risk.
-        # However, Python GIL helps.
-        # Ideally, notifyCollision should be thread safe.
+        logging.debug(f"{log_prefix} ScheduledTask _run completed for {handle.name()}")
+        handle.notifyCompletion()
 
 #
 # END OF CLASS SCHEDULEDTASK

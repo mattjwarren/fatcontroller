@@ -53,9 +53,16 @@ class daemon(FC_ScheduledTask.ScheduledTask):
         import time
         import os
         
+        # Retrieve trace_id from ScheduledTask instance if available
+        current_trace_id = getattr(adaemon, 'current_trace_id', 'NO_TRACE_ID')
+        log_prefix = f"[{current_trace_id}]"
+
+        logging.debug(f"{log_prefix} Daemon {adaemon.name} starting run cycle")
+        
         # dbg('Starting run for >|'+adaemon.name+'|<',DBGBN)
         for task_name, task in list(adaemon.tasks.items()):
             # dbg('Doing task >|'+task_name+'|<',DBGBN)
+            logging.debug(f"{log_prefix} Processing task {task_name}")
             
             # The original code seemingly had a variable naming issue with 'tsk'. 
             # We assume tsk meant task_name.
@@ -63,14 +70,17 @@ class daemon(FC_ScheduledTask.ScheduledTask):
             entities = list(task.entities.items())
             for entity_name, entity in entities:
                 try:
+                    logging.debug(f"{log_prefix} Executing task {task_name} on entity {entity_name}")
                     # execute is now async
-                    cmd_output = await entity.execute(task.command)
+                    cmd_output = await entity.execute(task.command, trace_id=current_trace_id)
+                    logging.debug(f"{log_prefix} Entity {entity_name} returned {len(cmd_output) if cmd_output else 0} lines")
                     
                     collectors = list(task.collectors.items())
                     for collector_name, collector in collectors:
                         # collector.read logic seems synchronous and cpu bound mostly (parsing).
                         # We can run it directly or wrap it if very expensive.
                         # Assuming fast enough for now.
+                        logging.debug(f"{log_prefix} Running collector {collector_name}")
                         collector.read(cmd_output, adaemon, task, collector, entity)
                         
                         collectorfile = collector.data_filename
@@ -86,10 +96,12 @@ class daemon(FC_ScheduledTask.ScheduledTask):
                                     timestamp = str(time.ctime(float(time.time())))
                                     outfile.write(timestamp + ',' + collector.lastoutline + '\n')
                             except Exception as e:
-                                logging.error(f"Error writing collector output: {e}")
+                                logging.error(f"{log_prefix} Error writing collector output: {e}")
                                 
                 except Exception as e:
-                    logging.error(f"Error executing task {task_name} on entity {entity_name}: {e}")
+                    logging.error(f"{log_prefix} Error executing task {task_name} on entity {entity_name}: {e}", exc_info=True)
+        
+        logging.debug(f"{log_prefix} Daemon {adaemon.name} finished run cycle")
 
     def setschedule(self,start,end,period):
         self.schedule.updateschedule(start,end,period)

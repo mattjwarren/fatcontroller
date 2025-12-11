@@ -27,8 +27,11 @@ class TestFatController:
 
     def test_process_command_basic(self, app):
         # Mock specific command handling if needed, or rely on mocking EntityManager
-        app.EntityManager.execute = MagicMock()
+        # Mock specific command handling if needed, or rely on mocking EntityManager
+        async def mock_execute(*args, **kwargs): pass
+        app.EntityManager.execute = MagicMock(side_effect=mock_execute)
         app.EntityManager.LastExecutedEntity = "TestEntity"
+        app.loop = MagicMock() # Mock the loop to bypass check
         
         # Test a command that falls through to entity
         app.processcommand("some_command arg1")

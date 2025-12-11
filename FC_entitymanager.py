@@ -83,7 +83,7 @@ class entitymanager:
         return self.Entities[EntityName].getparameterstring()
 
     # # Need to change this, coupling between entitymanager and entities. Shouldnt need to know numb of parms needed
-    def define(self, type: str, typeparms: list) -> None:                                #TSMServer tpyeparms;    ['name','adminuser','adminpass']
+    async def execute(self, EntityName: str, CmdList: list, trace_id=None):                                #TSMServer tpyeparms;    ['name','adminuser','adminpass']
         EntityName = None
         if type=='TSM':                                 #becomes Entites{'name',['adminuser','adminpass']}
             if len(typeparms)==6:
@@ -159,62 +159,68 @@ class entitymanager:
             self.display.infodisplay('Exception caught in entitymanager define: ' + str(e))
             pass
 
-
-    async def execute(self, EntityName: str, CmdList: list) -> None:
-        DBGBN='entitymanagerexecute'
+    async def execute(self, EntityName: str, CmdList: list, trace_id=None):
+        import logging
+        import uuid
+        import asyncio
+        
+        if trace_id is None:
+            trace_id = str(uuid.uuid4())[:8]  
+            logging.debug(f"[{trace_id}] EntityManager.execute initiated for {EntityName} (new trace)")
+        else:
+            logging.debug(f"[{trace_id}] EntityManager.execute continuing for {EntityName}")
+            
         try:
-            EntityType=self.Entities[EntityName].getentitytype()
+            EntityType = self.getentitytype(EntityName)
             
-            # Since Entities.execute is now async, we await it
-            output = await self.Entities[EntityName].execute(CmdList) #list of output returned
-            
-            # Select the tab
-            try:
-                # GUI updates in async execution:
-                # In FatController.py we are dispatching this.
-                # However, GUI calls must be on main thread.
-                # But self.OutBook.select is a Tkinter call.
-                # If this runs in asyncio loop thread, it might crash Tkinter.
-                # We need to schedule GUI updates back to main thread.
-                pass
-            except:
-                pass
-            
-            # IMPORTANT: Display/GUI updates must be efficient.
-            # We can't easily jump back to main thread here inside the library without FatController reference
-            # or a mechanism.
-            # But FatController passes OutputNotebook (OutBook) which is a widget.
-            # Accessing it from background thread is unsafe.
-            
-            # Temporary fix: Don't update GUI directly or assume thread safety for now?
-            # Or use after_idle via the widget?
-            # But we are in a different thread.
-            
-            # Actually, `asyncio` loop is in a thread.
-            # We SHOULD use `self.OutBook.after(0, lambda: ...)`?
-            # Yes, `after` is thread safe enough usually, or `event_generate`.
-            
-            # Let's wrap GUI calls.
-            
-            def update_gui(output=output, ename=EntityName, etype=EntityType):
-                 try:
-                    if etype != 'ENTITYGROUP':
-                        self.OutBook.select(self.OutPages[ename]['tab_id'])
-                    
-                    self.Entities[ename].display(output, self.OutPages[ename]['text'])
-                    self.OutPages[ename]['text'].see(tk.END)
-                    self.ReturnFocus.focus_set()
-                 except Exception as e:
-                    print(f"GUI Update Error: {e}")
+            if EntityType:
+                # Check if this is a group (recursive/parallel execution)
+                if EntityType == 'ENTITYGROUP':
+                    entity_instance = self.getEntity(EntityName)
+                    try:
+                        output = await entity_instance.execute(CmdList, trace_id=trace_id)
+                        self.display(EntityName, output)
+                        logging.debug(f"[{trace_id}] Execution finished for entity group {EntityName}")
+                        return output 
+                    except Exception as e:
+                        logging.error(f"[{trace_id}] Error executing entity group {EntityName}: {e}", exc_info=True)
+                        return []
+                        
+                else:
+                    # Regular entity
+                    entity_instance = self.getEntity(EntityName)
+                    try:
+                        output = await entity_instance.execute(CmdList, trace_id=trace_id)
+                        
+                        logging.debug(f"[{trace_id}] Execution finished for {EntityName}, received {len(output) if output else 0} lines")
+                        
+                        def update_gui_callback(output_data, ename=EntityName, etype=EntityType):
+                            try:
+                                if etype != 'ENTITYGROUP': # This check is technically redundant here due to the outer if/else
+                                    self.OutBook.select(self.OutPages[ename]['tab_id'])
+                                
+                                self.Entities[ename].display(output_data, self.OutPages[ename]['text'])
+                                self.OutPages[ename]['text'].see(tk.END)
+                                self.ReturnFocus.focus_set()
+                            except Exception as e:
+                                print(f"GUI Update Error for {ename}: {e}")
+                                logging.error(f"[{trace_id}] GUI Update Error for {ename}: {e}", exc_info=True)
 
-            # Schedule on main thread via widget
-            self.OutBook.after(0, update_gui)
-            
-            self.LastExecutedEntity=EntityName
+                        self.OutBook.after(0, update_gui_callback, output)
+                        
+                        self.LastExecutedEntity=EntityName
+                        return output
+                        
+                    except Exception as e:
+                        logging.error(f"[{trace_id}] Error executing entity {EntityName}: {e}", exc_info=True)
+                        return []
+            else:
+                logging.error(f"[{trace_id}] Entity {EntityName} not found or unknown type")
+                return []
         except KeyError:
-            # self.display.infodisplay is also GUI call? 
-            # OutputFormatter needs checking.
-            print(f'Error: Don\'t know how to execute commands for {EntityName}.')
+            logging.error(f"[{trace_id}] Error: Don't know how to execute commands for {EntityName} (KeyError).")
+            return []
+
 
     def scheduledexecute(self,entity,cmd_list):
         EntityType=entity.getentitytype()
