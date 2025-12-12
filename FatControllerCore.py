@@ -688,7 +688,10 @@ class FatControllerCore:
             if len(self.DaemonManager.getOutstandingAlerts())>0:
                 self.ShellTextCtrl.config(bg='#ffcccc') # Light red
             else:
-                self.ShellTextCtrl.config(bg='white')
+                # Restore default background - don't hardcode white as it conflicts with themes
+                if hasattr(self, 'default_shell_bg'):
+                    self.ShellTextCtrl.config(bg=self.default_shell_bg)
+                # If default_shell_bg not set (headless mode), skip color change
                 
             self.prompt='FC:'+self.EntityManager.LastExecutedEntity+'> '
             self.ShellEntry.delete(0, tk.END)
@@ -714,7 +717,10 @@ class FatControllerCore:
 
 
     def reset_alert_indicator(self):
-        self.ShellTextCtrl.config(bg='white')
+        # Restore default background - don't hardcode white as it conflicts with themes
+        if hasattr(self, 'default_shell_bg'):
+            self.ShellTextCtrl.config(bg=self.default_shell_bg)
+        # If default_shell_bg not set (headless mode), skip color change
 
     def show_alert_queue(self):
         self.display.infodisplay('F!HAlert Queue:')

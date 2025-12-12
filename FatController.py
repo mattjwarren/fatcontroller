@@ -127,8 +127,10 @@ class FatController(ttk.Window):
         
         # Shell
         self.ShellTextCtrl = tk.Text(self.BLPanel, height=10)
+        self.ShellTextCtrl.pack(side='top', fill='both', expand=True)
         self.ShellTextCtrl.configure(state='disabled')
-        self.ShellTextCtrl.pack(fill=tk.BOTH, expand=True)
+        # Store default background color for alert reset
+        self.default_shell_bg = self.ShellTextCtrl.cget('bg')
         # Entry for command
         self.ShellEntry = ttk.Entry(self.BLPanel)
         self.ShellEntry.pack(fill=tk.X)
@@ -621,7 +623,7 @@ class FatController(ttk.Window):
             if len(self.DaemonManager.getOutstandingAlerts())>0:
                 self.ShellTextCtrl.config(bg='#ffcccc') # Light red
             else:
-                self.ShellTextCtrl.config(bg='white')
+                self.ShellTextCtrl.config(bg=self.default_shell_bg)  # Restore default theme background
                 
             self.prompt='FC:'+self.EntityManager.LastExecutedEntity+'> '
             self.ShellEntry.delete(0, tk.END)
@@ -647,7 +649,7 @@ class FatController(ttk.Window):
 
 
     def reset_alert_indicator(self):
-        self.ShellTextCtrl.config(bg='white')
+        self.ShellTextCtrl.config(bg=self.default_shell_bg)  # Restore default theme background
 
     def show_alert_queue(self):
         self.display.infodisplay('F!HAlert Queue:')
