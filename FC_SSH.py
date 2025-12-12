@@ -96,7 +96,7 @@ class SSH(FC_entity.entity):
             logging.error(f"FC_SSH [{self.Name}]: Error creating Connection object: {e}")
             return None
 
-    async def execute(self, CmdList):
+    async def execute(self, CmdList, trace_id=None):
         logging.debug(f"FC_SSH [{self.Name}]: execute called with {CmdList}")
         Output = []
         

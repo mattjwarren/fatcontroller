@@ -1207,6 +1207,7 @@ class FatControllerCore:
                 matched, executed = self.CommandParser.match_and_execute(cmd_def, SplitCmd)
                 if matched:
                     CommandHit = True
+                    logging.debug(f"[processcommand] Command matched in CommandDefinitions: {SplitCmd[0]}")
                     # If executed is False, it meant we matched but no 'create' action was defined?
                     # In .sav file every command has a create action essentially.
                     break
@@ -1227,7 +1228,9 @@ class FatControllerCore:
                     self.processcommand(AliasCmd)
                 else:
                     # Fallback to Entity execution
+                    logging.debug(f"[processcommand] Command not recognized, falling back to entity execution")
                     if self.EntityManager.LastExecutedEntity!='':
+                        logging.debug(f"[processcommand] Dispatching to entity: {self.EntityManager.LastExecutedEntity} with command: {SplitCmd}")
                         # self.EntityManager.execute expectes (EntityName, CmdList)
                         # We pass rest of command as CmdList?
                         # Original: self.EntityManager.execute(self.EntityManager.LastExecutedEntity,SplitCmd[0:])

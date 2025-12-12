@@ -169,8 +169,27 @@ class CommandParser:
              for raw_arg in raw_args:
                  if raw_arg: 
                     resolved_args.append(self._resolve_arg(raw_arg, split_cmd))
+             
+             # Special handling for async EntityManager.execute()
+             if attr == 'EntityManager' and method_name == 'execute':
+                 import asyncio
+                 import inspect
                  
-             # Execute
+                 # Verify it's actually an async method
+                 if inspect.iscoroutinefunction(method):
+                     logging.debug(f"CommandParser: Dispatching async EntityManager.execute({resolved_args[0]}, {resolved_args[1]}) to event loop")
+                     
+                     # Dispatch to async loop
+                     if hasattr(self.app, 'loop') and self.app.loop:
+                         asyncio.run_coroutine_threadsafe(
+                             method(*resolved_args),
+                             self.app.loop
+                         )
+                     else:
+                         logging.error("Async loop not initialized! Cannot execute entity command.")
+                     return
+                 
+             # Execute synchronously for all other methods
              method(*resolved_args)
                  
         except Exception as e:

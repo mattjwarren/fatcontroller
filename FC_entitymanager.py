@@ -179,7 +179,8 @@ class entitymanager:
                     entity_instance = self.getEntity(EntityName)
                     try:
                         output = await entity_instance.execute(CmdList, trace_id=trace_id)
-                        self.display(EntityName, output)
+                        # For entity groups, don't call display here - the individual entities handle their own display
+                        # The group execution already shows output for each member
                         logging.debug(f"[{trace_id}] Execution finished for entity group {EntityName}")
                         return output 
                     except Exception as e:

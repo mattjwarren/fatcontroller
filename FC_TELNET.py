@@ -67,7 +67,7 @@ class TELNET(FC_entity.entity):
 
     Opts={} #dict of options
 
-    async def execute(self, CmdList):
+    async def execute(self, CmdList, trace_id=None):
         loop = asyncio.get_event_loop()
         
         def blocking_telnet_execute():

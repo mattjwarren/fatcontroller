@@ -91,7 +91,7 @@ class TSM(FC_entity.entity):
 
     Opts={}
 
-    async def execute(self,CmdList):
+    async def execute(self,CmdList, trace_id=None):
         loop = asyncio.get_event_loop()
         
         def blocking_tsm_execute():
