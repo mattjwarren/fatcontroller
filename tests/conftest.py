@@ -135,36 +135,57 @@ def mock_tkinter(monkeypatch):
 @pytest.fixture
 def app(mock_tkinter, monkeypatch):
     """
-    Create a FatController instance for testing.
+    Create a FatControllerCore instance for testing (headless mode).
     """
-    # CRITICAL: Patch ttkbootstrap.Window.__init__ BEFORE importing FatController
-    # This prevents the real Tk instance creation
-    import ttkbootstrap
-    
-    original_window_init = ttkbootstrap.Window.__init__
-    
-    def mock_window_init(self, *args, **kwargs):
-        # Don't call the original __init__, just set required attributes
-        self.master = None
-        self.children = {}
-        self._tkloaded = False
-        self.tk = MagicMock()
-        # Add any other attributes that FatController might need
-        pass
-    
-    monkeypatch.setattr(ttkbootstrap.Window, '__init__', mock_window_init)
-    
-    # NOW import FatController after patching
-    import FatController
+    # Import FatControllerCore instead of full FatController
+    import FatControllerCore
     
     # Mock methods that might interfere or are slow
-    if hasattr(FatController, 'FC_ThreadedScheduler'):
-        monkeypatch.setattr(FatController.FC_ThreadedScheduler, 'ThreadedScheduler', MagicMock())
+    if hasattr(FatControllerCore, 'FC_ThreadedScheduler'):
+        monkeypatch.setattr(FatControllerCore.FC_ThreadedScheduler, 'ThreadedScheduler', MagicMock())
     
-    app = FatController.FatController()
+    # Create core instance WITHOUT GUI (init_gui=False)
+    app = FatControllerCore.FatControllerCore(init_gui=False)
     
     # Mock specific attributes that are complex
     app.FCScheduler = MagicMock()
+    
+    yield app
+    
+    # Teardown logic
+    if hasattr(app, 'FCScheduler'):
+         try:
+             app.FCScheduler.stop()
+         except:
+             pass
+
+
+@pytest.fixture
+def gui_app(mock_tkinter, monkeypatch):
+    """
+    Create a FatControllerCore instance with mocked GUI widgets for GUI tests.
+    """
+    # Import FatControllerCore instead of full FatController
+    import FatControllerCore
+    
+    # Mock methods that might interfere or are slow
+    if hasattr(FatControllerCore, 'FC_ThreadedScheduler'):
+        monkeypatch.setattr(FatControllerCore.FC_ThreadedScheduler, 'ThreadedScheduler', MagicMock())
+    
+    # Create core instance WITHOUT GUI (init_gui=False)
+    app = FatControllerCore.FatControllerCore(init_gui=False)
+    
+    # Mock specific attributes that are complex
+    app.FCScheduler = MagicMock()
+    
+    # Mock GUI widgets that RHS panel tests expect
+    app.ObjectListbox = MagicMock()
+    app.ObjectTypeVar = MagicMock()
+    app.ObjectTypeVar.get.return_value = 'Entities'
+    app.EntityTypeVar = MagicMock()
+    app.EntityTypeVar.get.return_value = ''
+    app.EntityTypeCombo = MagicMock()
+    app.ConfigSelectNotebook = MagicMock()
     
     yield app
     

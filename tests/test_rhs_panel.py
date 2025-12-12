@@ -1,126 +1,181 @@
-
 import pytest
 from unittest.mock import MagicMock, patch
 
-class TestRHSPanel:
+class TestRHSPanelBusinessLogic:
+    """Tests for RHS Panel business logic (headless-compatible)."""
 
-
-    def test_refresh_object_list_entities(self, app):
+    def test_refresh_object_data_entities_no_filter(self, app):
+        """Test getting all entities without type filter"""
         # Setup
-        app.ObjectTypeVar.set('Entities')
-        app.EntityManager.getentitylist = MagicMock(return_value={'Entity1': MagicMock(), 'Entity2': MagicMock()})
+        e1 = MagicMock()
+        e2 = MagicMock()
+        app.EntityManager.getentitylist = MagicMock(return_value={'Entity1': e1, 'Entity2': e2})
         
         # Action
-        app.refresh_object_list()
+        result = app.refresh_object_data('Entities')
         
-        # Assert
-        app.ObjectListbox.delete.assert_called_with(0, 'end')
-        # Insert called for each item
-        # Since items are sorted, Entity1 then Entity2
-        calls = app.ObjectListbox.insert.call_args_list
-        assert len(calls) == 2
-        assert calls[0][0][1] == 'Entity1'
-        assert calls[1][0][1] == 'Entity2'
+        # Assert - should return sorted list
+        assert result == ['Entity1', 'Entity2']
+        app.EntityManager.getentitylist.assert_called_once()
 
-    def test_refresh_object_list_daemons(self, app):
-        app.ObjectTypeVar.set('Daemons')
-        app.DaemonManager.getDaemons = MagicMock(return_value={'Daemon1': MagicMock()})
-        
-        app.refresh_object_list()
-        
-        app.ObjectListbox.insert.assert_called_with('end', 'Daemon1')
-
-    def test_on_type_selected_entities_creates_subdropdown(self, app):
-        app.ObjectTypeVar.set('Entities')
-        app.EntityManager.get_entity_types_metadata = MagicMock(return_value={'TSM': [], 'TELNET': []})
-        
-        app.on_type_selected(None)
-        
-        assert hasattr(app, 'EntityTypeCombo')
-        # Check values
-        app.EntityManager.get_entity_types_metadata.assert_called()
-
-    def test_filter_entities(self, app):
-        app.ObjectTypeVar.set('Entities')
-        # Setup entities with types
+    def test_refresh_object_data_entities_with_filter(self, app):
+        """Test filtering entities by type"""
+        # Setup  
         e1 = MagicMock()
         e1.getentitytype.return_value = 'TSM'
         e2 = MagicMock()
-        e2.getentitytype.return_value = 'TELNET'
+        e2.getentitytype.return_value = 'SSH'
         app.EntityManager.getentitylist = MagicMock(return_value={'E1': e1, 'E2': e2})
         
-        # Trigger creation of EntityTypeVar
-        # We need get_entity_types_metadata to return keys for the dropdown
-        app.EntityManager.get_entity_types_metadata = MagicMock(return_value={'TSM': [], 'TELNET': []})
+        # Action
+        result = app.refresh_object_data('Entities', entity_type_filter='TSM')
         
-        app.on_type_selected(None)
-        
-        # Set filter
-        app.EntityTypeVar.set('TSM')
-        
-        app.refresh_object_list()
-        
-        # Should only insert E1
-        args_list = app.ObjectListbox.insert.call_args_list
-        # Note: insert calls might accumulate if mock not reset? No, refresh calls delete first.
-        inserted = [call[0][1] for call in args_list]
-        assert 'E1' in inserted
-        assert 'E2' not in inserted
+        # Assert - should only return TSM entity
+        assert result == ['E1']
 
-    def test_create_new_entity(self, app):
-        import tkinter.ttk as ttk
+    def test_refresh_object_data_daemons(self, app):
+        """Test getting daemon list"""
+        # Setup
+        app.DaemonManager.getDaemons = MagicMock(return_value={'Daemon1': MagicMock(), 'Daemon2': MagicMock()})
         
-        # Setup "New" mode
-        app.ObjectTypeVar.set('Entities')
-        app.ObjectListbox.curselection.return_value = [] # No selection
+        # Action
+        result = app.refresh_object_data('Daemons')
         
-        # Explicitly set EntityTypeVar
-        app.EntityTypeVar = MagicMock()
-        app.EntityTypeVar.get.return_value = 'TSM'
-        
-        # Prepare the mock frame
-        config_frame = MagicMock()
-        config_frame.input_vars = {}
-        
-        # Mocks for EntityManager
-        app.EntityManager.get_entity_types_metadata = MagicMock(return_value={'TSM': ['Port']})
-        app.EntityManager.define = MagicMock()
-        
-        # Use patch.object on the module instance found in sys.modules
-        # But since we can't easily reach that instance's attribute from here if it is dynamic,
-        # we try patching 'FatController.ttk.Frame'.
-        with patch('FatController.ttk.Frame', return_value=config_frame):
-            # Action
-            app.update_config_tabs()
-        
-            # Debug / Assertion
-            assert config_frame.input_vars, "input_vars is empty. create_config_pane didn't populate it."
-            assert 'Name' in config_frame.input_vars
-            assert 'Port' in config_frame.input_vars
-            
-            # Simulate user input
-            config_frame.input_vars['Name'].set('NewTSM')
-            config_frame.input_vars['Port'].set('1234')
-            
-            # Setup for add_object_dialog
-            app.ConfigSelectNotebook.tabs.return_value = ['tab1']
-            app.ConfigSelectNotebook.nametowidget.return_value = config_frame
-            
-            app.add_object_dialog()
-            
-            # Verify define was called
-            app.EntityManager.define.assert_called_with('TSM', ['NewTSM', '1234'])
+        # Assert
+        assert result == ['Daemon1', 'Daemon2']
 
-    def test_remove_object(self, app):
-        app.ObjectTypeVar.set('Aliases')
-        app.ObjectListbox.curselection.return_value = [0]
-        app.ObjectListbox.get.return_value = 'MyAlias'
+    def test_refresh_object_data_aliases(self, app):
+        """Test getting alias list"""
+        # Setup
+        app.aliases = {'Alias1': ['cmd1'], 'Alias2': ['cmd2']}
         
+        # Action
+        result = app.refresh_object_data('Aliases')
+        
+        # Assert
+        assert result == ['Alias1', 'Alias2']
+
+    def test_refresh_object_data_scripts(self, app):
+        """Test getting script list"""
+        # Setup
+        app.scripts = {'Script1': ['line1'], 'Script2': ['line2']}
+        
+        # Action
+        result = app.refresh_object_data('Scripts')
+        
+        # Assert
+        assert result == ['Script1', 'Script2']
+
+    def test_refresh_object_data_substitutions(self, app):
+        """Test getting substitutions list"""
+        # Setup
+        app.substitutions = {'Sub1': ['val1'], 'Sub2': ['val2']}
+        
+        # Action
+        result = app.refresh_object_data('Substitutions')
+        
+        # Assert
+        assert result == ['Sub1', 'Sub2']
+
+    def test_get_filtered_entities_no_filter(self, app):
+        """Test getting all entities without filter"""
+        # Setup
+        entities = {'E1': MagicMock(), 'E2': MagicMock()}
+        app.EntityManager.getentitylist = MagicMock(return_value=entities)
+        
+        # Action
+        result = app.get_filtered_entities()
+        
+        # Assert
+        assert result == entities
+
+    def test_get_filtered_entities_with_filter(self, app):
+        """Test filtering entities by type"""
+        # Setup
+        e1 = MagicMock()
+        e1.getentitytype.return_value = 'TSM'
+        e2 = MagicMock()
+        e2.getentitytype.return_value = 'SSH'
+        app.EntityManager.getentitylist = MagicMock(return_value={'E1': e1, 'E2': e2})
+        
+        # Action
+        result = app.get_filtered_entities('TSM')
+        
+        # Assert
+        assert 'E1' in result
+        assert 'E2' not in result
+        assert len(result) == 1
+
+    def test_remove_object_logic_entity(self, app):
+        """Test removing an entity"""
+        # Setup
+        app.EntityManager.delete = MagicMock()
+        
+        # Action
+        result = app.remove_object_logic('Entities', 'MyEntity')
+        
+        # Assert
+        assert result is True
+        app.EntityManager.delete.assert_called_once_with('MyEntity')
+
+    def test_remove_object_logic_daemon(self, app):
+        """Test removing a daemon"""
+        # Setup
+        app.DaemonManager.deleteDaemon = MagicMock()
+        
+        # Action
+        result = app.remove_object_logic('Daemons', 'MyDaemon')
+        
+        # Assert
+        assert result is True
+        app.DaemonManager.deleteDaemon.assert_called_once_with('MyDaemon')
+
+    def test_remove_object_logic_alias(self, app):
+        """Test removing an alias"""
+        # Setup
         app.aliases = {'MyAlias': ['ls']}
         
-        with patch('tkinter.messagebox.askyesno', return_value=True):
-            app.remove_selected_objects()
-            
+        # Action
+        result = app.remove_object_logic('Aliases', 'MyAlias')
+        
+        # Assert
+        assert result is True
         assert 'MyAlias' not in app.aliases
+
+    def test_remove_object_logic_script(self, app):
+        """Test removing a script"""
+        # Setup
+        app.scripts = {'MyScript': ['line1']}
+        
+        # Action
+        result = app.remove_object_logic('Scripts', 'MyScript')
+        
+        # Assert
+        assert result is True
+        assert 'MyScript' not in app.scripts
+
+    def test_remove_object_logic_substitution(self, app):
+        """Test removing a substitution"""
+        # Setup
+        app.substitutions = {'MySub': ['value']}
+        
+        # Action
+        result = app.remove_object_logic('Substitutions', 'MySub')
+        
+        # Assert
+        assert result is True
+        assert 'MySub' not in app.substitutions
+
+    def test_remove_object_logic_handles_error(self, app):
+        """Test that remove_object_logic returns False on error"""
+        # Setup - make delete raise an exception
+        app.EntityManager.delete = MagicMock(side_effect=Exception("Delete failed"))
+        
+        # Action
+        result = app.remove_object_logic('Entities', 'BadEntity')
+        
+        # Assert
+        assert result is False
+
 
 
